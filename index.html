@@ -311,11 +311,11 @@ textarea{min-height:90px;resize:vertical}
     <div class="authstrip"><svg class="mini" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"></svg></div>
     <h1>Create your account</h1>
     <p class="mut" id="su-why">Save your plan and get it by email.</p>
-    <form id="f-signup" novalidate>
-      <div class="field"><label for="su-name">Name</label><input id="su-name" type="text" autocomplete="name" required></div>
-      <div class="field"><label for="su-email">Email</label><input id="su-email" type="email" autocomplete="email" required></div>
-      <div class="field"><label for="su-phone">Mobile number</label><input id="su-phone" type="tel" autocomplete="tel" placeholder="0412 345 678" required></div>
-      <div class="field"><label for="su-pass">Password</label><div class="pw"><input id="su-pass" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-pw="su-pass">Show</button></div><span class="small mut">At least 8 characters</span></div>
+    <form id="f-signup" method="post" action="#" novalidate>
+      <div class="field"><label for="su-name">Name</label><input id="su-name" name="name" type="text" autocomplete="name" required></div>
+      <div class="field"><label for="su-email">Email</label><input id="su-email" name="email" type="email" autocomplete="username" required></div>
+      <div class="field"><label for="su-phone">Mobile number</label><input id="su-phone" name="phone" type="tel" autocomplete="tel" placeholder="0412 345 678" required></div>
+      <div class="field"><label for="su-pass">Password</label><div class="pw"><input id="su-pass" name="password" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-pw="su-pass">Show</button></div><span class="small mut">At least 8 characters</span></div>
       <p class="err" id="su-err" role="alert"></p>
       <button class="btn btn-go" type="submit" style="width:100%;margin-top:14px">Sign up</button>
     </form>
@@ -329,9 +329,9 @@ textarea{min-height:90px;resize:vertical}
     <div class="authstrip"><svg class="mini" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"></svg></div>
     <h1>Welcome back</h1>
     <p class="mut" id="li-why">Log in to see your plan.</p>
-    <form id="f-login" novalidate>
-      <div class="field"><label for="li-email">Email</label><input id="li-email" type="email" autocomplete="email" required></div>
-      <div class="field"><label for="li-pass">Password</label><div class="pw"><input id="li-pass" type="password" autocomplete="current-password" required><button type="button" data-pw="li-pass">Show</button></div></div>
+    <form id="f-login" method="post" action="#" novalidate>
+      <div class="field"><label for="li-email">Email</label><input id="li-email" name="email" type="email" autocomplete="username" required></div>
+      <div class="field"><label for="li-pass">Password</label><div class="pw"><input id="li-pass" name="password" type="password" autocomplete="current-password" required><button type="button" data-pw="li-pass">Show</button></div></div>
       <p class="err" id="li-err" role="alert"></p>
       <button class="btn btn-go" type="submit" style="width:100%;margin-top:14px">Log in</button>
     </form>
@@ -1063,13 +1063,15 @@ async function onSignup(ev){
   if(pw.length<8)return err('Your password needs at least 8 characters.');
   if(users[email])return err('There is already an account with this email. Log in instead.');
   users[email]={name,email,phone,pw:await hashPw(pw),joined:new Date().toISOString()};
-  store.set('tm_users',users);session=email;store.set('tm_session',email);err('');ev.target.reset();afterAuth();
+  store.set('tm_users',users);session=email;store.set('tm_session',email);err('');rememberLogin(email,pw,name);afterAuth();setTimeout(()=>ev.target.reset(),1500);
 }
+// Ask the browser's password manager (Chrome, Edge, Android) to save the login. Safari and iPhone offer this on their own when the form is submitted.
+function rememberLogin(id,password,name){try{if(window.PasswordCredential&&navigator.credentials)navigator.credentials.store(new PasswordCredential({id,password,name})).catch(()=>{})}catch(e){}}
 async function onLogin(ev){
   ev.preventDefault();
   const email=$('#li-email').value.trim().toLowerCase(), pw=$('#li-pass').value, u=users[email];
   if(!u||u.pw!==await hashPw(pw)){$('#li-err').textContent='That email and password don\'t match. Check them or create an account.';return}
-  session=email;store.set('tm_session',email);$('#li-err').textContent='';ev.target.reset();afterAuth();
+  session=email;store.set('tm_session',email);$('#li-err').textContent='';rememberLogin(email,pw,u.name);afterAuth();setTimeout(()=>ev.target.reset(),1500);
 }
 
 // ---------- plan rendering ----------
