@@ -978,11 +978,6 @@ function sceneSVG(){
   <path d="M600 510 L1250 510" stroke="#5f746a" stroke-width="3"/>
   ${fenceRun(600,510,1250,510,34,46)}${fenceRun(600,510,580,545,30,40)}${fenceRun(1250,510,1270,545,30,40)}
 
-  <!-- sign over the dumbbell rack -->
-  <g fill="${grn}"><rect x="1066" y="424" width="7" height="88"/><rect x="1187" y="424" width="7" height="88"/></g>
-  <rect x="1046" y="404" width="168" height="38" rx="8" fill="${grn}"/><rect x="1046" y="404" width="168" height="6" rx="3" fill="${lite}"/>
-  <text x="1130" y="432" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,Arial,sans-serif" font-weight="800" font-size="24" letter-spacing="2" textLength="138" lengthAdjust="spacingAndGlyphs" fill="#fff">BEACH GYM</text>
-
   <!-- dumbbell rack + plate tree (back row) -->
   <g fill="${ink}"><rect x="1074" y="470" width="6" height="46"/><rect x="1180" y="470" width="6" height="46"/><rect x="1070" y="478" width="120" height="5" rx="2"/><rect x="1070" y="500" width="120" height="5" rx="2"/></g>
   ${[0,1,2,3].map(i=>dumbbell(1082+i*26,472,16,i%2?'#3a4a43':iron)).join('')}${[0,1,2,3].map(i=>dumbbell(1082+i*26,494,16,i==1?coral:iron)).join('')}
