@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TrainMe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday and encouraging: a coach on the beach path at sunrise, never a gym-bro poster
+   IDEA a Sydney ocean pool at dawn: lanes, sandstone, fresh food; the plan reads like a coach's clipboard
+   PICTURE illustrated sunrise over an ocean pool and sandstone cliff; on the plan, a 7-day training ribbon
+   COLOUR white ground, eucalyptus green leads, ocean blue supports, sunrise coral for every main action
+   TYPE Barlow Condensed (sports lettering) for titles and figures + Barlow for text
+   LAYOUT hero scene full-bleed with the title in the sky; forms in one calm column; plan = figures + ribbon, then tabs */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0d1613);--ink:light-dark(#10231b,#ecf4ef);--mut:light-dark(#4a5f55,#a7bbb1);--soft:light-dark(#eef6f1,#15241e);--card:light-dark(#ffffff,#122019);--line:light-dark(#d3e3d9,#29433a);--green:light-dark(#0e8a55,#37c784);--greenInk:light-dark(#ffffff,#05261a);--deep:light-dark(#0b3d2c,#0a2a1f);--sea:light-dark(#1b6fae,#62afe8);--coral:#ff5a3c;--coralD:#e2442a;--sun:#ffb547;--warn:light-dark(#fff4e0,#33260f);--warnInk:light-dark(#7a4a00,#ffd590)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Barlow Condensed",Barlow,sans-serif;line-height:1.05;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h1{font-size:clamp(38px,5.4vw,60px);font-weight:800}
+h2{font-size:clamp(30px,3.6vw,42px);font-weight:700}
+h3{font-size:23px;font-weight:700}
+p{margin:0}
+a{color:var(--green)}
+img,svg{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(5vw,16px)}
+.band{padding:clamp(36px,5vw,72px) 0}
+.mut{color:var(--mut)}
+.small{font-size:14px}
+[hidden]{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 22px;border-radius:14px;border:2px solid transparent;font-weight:700;font-size:17px;cursor:pointer;text-decoration:none;transition:transform .15s,background .15s}
+.btn svg{width:20px;height:20px;flex:none}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible,.chip input:focus-visible+span,.tab:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+.btn-cta{background:var(--coral);color:#fff;font-size:19px;min-height:58px;padding:14px 28px;box-shadow:0 6px 0 var(--coralD)}
+.btn-cta:hover{background:var(--coralD)}
+.btn-go{background:var(--green);color:var(--greenInk)}
+.btn-go:hover{filter:brightness(1.08)}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--green)}
+.btn-sm{min-height:40px;padding:8px 14px;font-size:15px;border-radius:11px}
+.link{background:none;border:0;padding:0;color:var(--green);font-weight:600;cursor:pointer;text-decoration:underline}
+/* top bar */
+.top{position:-webkit-sticky;position:sticky;top:0;z-index:20;background:var(--bg);background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:68px;flex-wrap:wrap}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font:800 27px/1 "Barlow Condensed",sans-serif;letter-spacing:-.01em}
+.logo b{color:var(--green)}
+.logo svg{width:38px;height:38px}
+.nav{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hello{font-weight:600;color:var(--mut)}
+/* hero */
+.hero{position:relative;background:linear-gradient(#a8dcf2 0%,#d7ecf2 38%,#ffe0bf 62%,#ffc597 72%);color:#10231b;min-height:660px;overflow:hidden}
+.hero .scene{position:absolute;inset:0;width:100%;height:100%}
+.hero-text{position:relative;z-index:1;max-width:600px;padding:clamp(40px,7vw,88px) 0 0}
+.hero-text p{font-size:19px;margin:18px 0 28px;max-width:30em;color:#1f3a2e}
+.hero-text .note{font-size:15px;margin:18px 0 0;color:#2c4a3c}
+.hero .btn-ghost{border-color:#10231b55;color:#10231b;background:#ffffff80}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+@media(max-width:700px){.hero{min-height:0;display:flex;flex-direction:column}.hero .scene{position:static;height:280px;margin-top:24px;order:2}.hero-text{padding-top:36px}}
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:28px}
+.step{background:var(--soft);border-radius:20px;padding:24px}
+.step svg{width:56px;height:56px;margin-bottom:12px}
+.step p{color:var(--mut);margin-top:6px}
+@media(max-width:760px){.steps{grid-template-columns:minmax(0,1fr)}}
+/* science */
+.sci{background:var(--deep);color:#eaf6ef}
+.sci .lead{color:#b9d8c8;margin-top:10px;max-width:46em}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin-top:30px;background:#ffffff1f;border-radius:18px;overflow:hidden}
+.fact{background:var(--deep);padding:22px}
+.fact .big{font:800 clamp(34px,4vw,46px)/1 "Barlow Condensed",sans-serif;color:#7fe0aa;white-space:nowrap}
+.fact .what{font-weight:600;margin:4px 0 6px}
+.fact .src{font-size:13px;color:#9fc1b0}
+.sci .who{margin-top:22px;font-size:15px;color:#b9d8c8}
+@media(max-width:860px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.facts{grid-template-columns:minmax(0,1fr)}}
+/* features */
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:26px}
+.feat div{border:1px solid var(--line);border-radius:18px;padding:20px;display:grid;gap:6px}
+.feat svg{width:30px;height:30px;color:var(--green)}
+.close{background:linear-gradient(100deg,#ff7a4f,#ffb547);color:#2a1206}
+.close .wrap{display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.close .btn-cta{background:#10231b;box-shadow:0 6px 0 #000}
+footer{background:var(--soft);padding:32px 0;font-size:14px;color:var(--mut)}
+footer .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:24px;align-items:start}
+@media(max-width:760px){footer .wrap{grid-template-columns:minmax(0,1fr)}}
+/* forms */
+.formpage{background:var(--soft);min-height:calc(100vh - 69px);min-height:calc(100svh - 69px);padding:clamp(24px,4vw,56px) 0 120px}
+.col{max-width:760px;margin:0 auto;padding:0 max(4vw,16px)}
+.col.narrow{max-width:480px}
+.stepper{display:flex;gap:8px;margin:0 0 18px;font-size:14px;font-weight:600;color:var(--mut);flex-wrap:wrap}
+.stepper span{display:inline-flex;align-items:center;gap:8px}
+.stepper span::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid currentColor}
+.stepper .on{color:var(--green)}
+.stepper .on::before{background:currentColor}
+.stepper .done{color:var(--ink)}
+.stepper .done::before{background:var(--ink);border-color:var(--ink)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,3vw,28px);margin-top:16px}
+.panel h3{margin-bottom:4px}
+.panel>.mut{font-size:15px;margin-bottom:14px}
+.field{display:grid;gap:6px;margin-top:14px}
+.field>label,.lbl{font-weight:600;font-size:15px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(max-width:560px){.grid3,.grid2{grid-template-columns:minmax(0,1fr)}}
+input[type=text],input[type=email],input[type=tel],input[type=password],input[type=number],textarea{width:100%;min-height:48px;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);font-size:16px}
+textarea{min-height:90px;resize:vertical}
+.unit{position:relative}
+.unit input{padding-right:46px}
+.unit i{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-style:normal;color:var(--mut);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;width:1px;height:1px}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:9px 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--bg);cursor:pointer;font-weight:500;user-select:none}
+.chip span:hover{border-color:var(--green)}
+.chip input:checked+span{background:var(--green);border-color:var(--green);color:var(--greenInk);font-weight:600}
+.goals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:640px){.goals{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.goals .chip span{display:grid;gap:2px;border-radius:16px;padding:14px;height:100%;align-content:start}
+.goals .chip b{font:700 20px/1.1 "Barlow Condensed",sans-serif}
+.goals .chip small{font-size:13px;opacity:.85}
+.err{color:#d0342c;font-size:14px;font-weight:600;min-height:0}
+.formend{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.authcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,4vw,34px);margin-top:8px}
+.authcard h1{font-size:40px}
+.authstrip{height:90px;border-radius:18px 18px 0 0;margin:-34px -34px 20px;overflow:hidden}
+@media(max-width:600px){.authstrip{margin:-22px -22px 18px}}
+.pw{position:relative}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);min-height:36px;padding:4px 10px;border:0;background:none;color:var(--green);font-weight:600;cursor:pointer}
+.alert{background:var(--warn);color:var(--warnInk);border-radius:14px;padding:14px 16px;margin-top:14px;font-size:15px}
+.alert b{display:block}
+/* plan */
+.planhead{background:var(--deep);color:#eaf6ef;padding:clamp(28px,4vw,48px) 0 26px}
+.planhead .sub{color:#b9d8c8;margin-top:6px}
+.figs{display:grid;grid-template-columns:1.1fr 1.6fr 1fr;gap:14px;margin-top:22px}
+.fig{background:#ffffff12;border-radius:18px;padding:18px}
+.fig .k{font-size:14px;color:#b9d8c8}
+.fig .v{font:800 clamp(40px,5vw,56px)/1 "Barlow Condensed",sans-serif;color:#fff;white-space:nowrap}
+.fig .v small{font-size:20px;font-weight:600;color:#b9d8c8}
+.macro{display:grid;grid-template-columns:5.5em minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:7px;font-size:15px}
+.bar{height:10px;border-radius:9px;background:#ffffff1c;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px}
+@media(max-width:820px){.figs{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.figs .fig:nth-child(2){grid-column:1/-1;order:3}}
+@media(max-width:460px){.figs{grid-template-columns:minmax(0,1fr)}}
+.ribbon{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:16px}
+.rday{border-radius:14px;padding:10px 10px 12px;min-height:96px;display:grid;align-content:space-between;color:#08241a}
+.rday b{font:700 18px/1 "Barlow Condensed",sans-serif}
+.rday span{font:700 16px/1.05 "Barlow Condensed",sans-serif}
+.rday small{font-size:13px;opacity:.8}
+.r-upper{background:#7cc4f2}.r-lower{background:#6fdba0}.r-full{background:#9fe3c3}.r-cardio{background:#ffc29f}.r-rest{background:#ffffff1a;color:#b9d8c8}
+@media(max-width:560px){.ribbon{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.coach{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:22px}
+@media(max-width:820px){.coach{grid-template-columns:minmax(0,1fr)}}
+.coach:has(#aipanel[hidden]){grid-template-columns:minmax(0,1fr)}
+.coach:has(#aipanel[hidden]) ul{columns:2 320px;column-gap:40px}
+.coach li{break-inside:avoid}
+.coach ul{margin:8px 0 0;padding-left:20px}
+.coach li{margin:6px 0}
+.ai{white-space:pre-wrap;margin-top:8px}
+.ask{display:flex;gap:8px;margin-top:12px}
+.ask input{flex:1}
+.answer{margin-top:10px;white-space:pre-wrap;background:var(--soft);border-radius:12px;padding:12px 14px}
+.tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-top:30px;overflow-x:auto}
+.tab{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:12px 16px;font:700 20px/1 "Barlow Condensed",sans-serif;color:var(--mut);cursor:pointer;min-height:48px;white-space:nowrap}
+.tab[aria-selected=true]{color:var(--ink);border-color:var(--coral)}
+.sess{background:var(--card);border:1px solid var(--line);border-radius:20px;margin-top:16px;overflow:hidden}
+.sess header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)}
+.sess header .mut{font-size:15px}
+.tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:13px;font-weight:700;color:#08241a}
+.warm{padding:10px 20px;font-size:15px;color:var(--mut);background:var(--soft)}
+.ex{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 16px;align-items:center;padding:14px 20px;border-top:1px solid var(--line)}
+.ex:first-of-type{border-top:0}
+.ex .nm{font-weight:700;font-size:17px}
+.ex .cue{font-size:14px;color:var(--mut)}
+.ex .dose{font:700 20px/1.1 "Barlow Condensed",sans-serif;text-align:right;white-space:nowrap}
+.ex .dose small{display:block;font:500 13px Barlow,sans-serif;color:var(--mut)}
+.ex .acts{display:flex;gap:6px}
+.caution{color:#c0561c;font-size:13px;font-weight:600}
+@media(max-width:600px){.ex{grid-template-columns:minmax(0,1fr) auto}.ex .acts{grid-column:1/-1}}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:16px}
+@media(max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.block{display:flex;gap:6px;margin:12px 0 4px}
+.block div{flex:1;border-radius:10px;padding:8px;background:var(--soft);font-size:13px;text-align:center}
+.block div b{display:block;font:700 17px "Barlow Condensed",sans-serif}
+.daypick{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+.meals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:14px}
+@media(max-width:760px){.meals{grid-template-columns:minmax(0,1fr)}}
+.meal{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.meal .pic{height:190px;background:var(--soft)}
+.meal .pic svg,.meal .pic img{width:100%;height:100%;display:block;object-fit:cover}
+.meal .body{padding:16px 18px;display:grid;gap:10px;flex:1;align-content:start}
+.meal .when{font-size:13px;font-weight:700;color:var(--green)}
+.meal .mac{display:flex;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--mut)}
+.meal .mac b{color:var(--ink)}
+.meal ul,.meal ol{margin:0;padding-left:20px;font-size:15px}
+.meal li{margin:2px 0}
+.meal .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 18px 16px}
+.totals{display:flex;gap:18px;flex-wrap:wrap;background:var(--soft);border-radius:14px;padding:12px 16px;margin-top:14px;font-size:15px}
+.shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px}
+.shop .panel{margin:0}
+.shop label{display:flex;gap:10px;align-items:center;min-height:40px;border-top:1px solid var(--line);font-size:15px;cursor:pointer}
+.shop label:first-of-type{border-top:0}
+.shop input{width:20px;height:20px;accent-color:var(--green);flex:none}
+.shop label span{flex:1}
+.shop label em{font-style:normal;color:var(--mut);white-space:nowrap}
+.shop input:checked~span{text-decoration:line-through;color:var(--mut)}
+.dock{position:-webkit-sticky;position:sticky;bottom:0;z-index:15;background:var(--bg);background:color-mix(in srgb,var(--bg) 94%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid var(--line);margin-top:40px}
+.dock .wrap{display:flex;gap:12px;align-items:center;justify-content:flex-end;min-height:76px;flex-wrap:wrap}
+.dock .mut{margin-right:auto;font-size:14px}
+@media(max-width:560px){.dock .mut{display:none}.dock .btn{flex:1;white-space:nowrap;padding:10px 12px;font-size:16px}}
+@media(max-width:440px){.hello{display:none}.top .wrap{gap:10px}}
+/* modal */
+.modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;background:#06140ecc;display:grid;place-items:center;padding:16px}
+.mbox{background:var(--bg);border-radius:22px;width:min(760px,100%);max-height:calc(100% - 20px);display:flex;flex-direction:column;overflow:hidden}
+.mhead{padding:20px 22px 12px;display:grid;gap:4px;border-bottom:1px solid var(--line)}
+.mhead .x{justify-self:end;margin:-6px -6px 0 0}
+.preview{overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:#eef2f0;padding:14px;flex:1;min-height:160px}
+.mfoot{padding:14px 22px 20px;display:grid;gap:10px}
+.status{font-size:14px;font-weight:600;color:var(--green);min-height:20px}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M10 8l6 4-6 4z" fill="var(--bg)"/></symbol>
+ <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></symbol>
+ <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 5.5V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h.5"/></symbol>
+ <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m-5-5l5 5 5-5M5 20h14"/></symbol>
+ <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+ <symbol id="i-clip" viewBox="0 0 56 56"><rect x="10" y="8" width="36" height="44" rx="7" fill="#6fdba0"/><rect x="20" y="4" width="16" height="10" rx="4" fill="#0b3d2c"/><path d="M18 26h20M18 34h20M18 42h12" stroke="#0b3d2c" stroke-width="3.5" stroke-linecap="round"/></symbol>
+ <symbol id="i-plate" viewBox="0 0 56 56"><circle cx="28" cy="30" r="22" fill="#ffd8c4"/><circle cx="28" cy="30" r="15" fill="#fff"/><circle cx="23" cy="27" r="5" fill="#ff5a3c"/><circle cx="33" cy="26" r="4.5" fill="#6fae3c"/><circle cx="29" cy="35" r="5" fill="#f4d35e"/></symbol>
+ <symbol id="i-cal" viewBox="0 0 56 56"><rect x="6" y="10" width="44" height="40" rx="8" fill="#7cc4f2"/><rect x="6" y="10" width="44" height="12" rx="6" fill="#1b6fae"/><g fill="#fff"><rect x="13" y="28" width="8" height="7" rx="2"/><rect x="24" y="28" width="8" height="7" rx="2"/><rect x="35" y="28" width="8" height="7" rx="2"/><rect x="13" y="38" width="8" height="7" rx="2"/></g><rect x="24" y="38" width="8" height="7" rx="2" fill="#ff5a3c"/></symbol>
+ <symbol id="i-dumb" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="8" width="4" height="8" rx="1.5"/><rect x="18" y="8" width="4" height="8" rx="1.5"/><rect x="5" y="10" width="14" height="4" rx="1.5"/></symbol>
+ <symbol id="i-leaf" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4C10 4 4 9 4 16c0 1.5.3 2.8.8 4 1-4 4-7.5 9-9.5-4 2.5-6.5 5.5-7.5 9.2C8 20.6 9.4 21 11 21c6 0 9-6 9-17z"/></symbol>
+ <symbol id="i-swapc" viewBox="0 0 24 24" fill="currentColor"><path d="M4 7h12l-3.5-3.5L14 2l6 6-6 6-1.5-1.5L16 9H4zM20 17H8l3.5 3.5L10 22l-6-6 6-6 1.5 1.5L8 15h12z"/></symbol>
+ <symbol id="i-cart" viewBox="0 0 24 24" fill="currentColor"><path d="M2 3h3l2.7 11.2a2 2 0 0 0 2 1.5h7.8a2 2 0 0 0 1.9-1.4L21.5 7H6.5L5.8 4.6A2 2 0 0 0 3.9 3z"/><circle cx="10" cy="20" r="1.8"/><circle cx="17" cy="20" r="1.8"/></symbol>
+ <symbol id="i-mailc" viewBox="0 0 24 24" fill="currentColor"><path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v.3l-9 6.2-9-6.2zm0 2.7V18a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.7l-9 6.2z"/></symbol>
+ <symbol id="logo" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#0e8a55"/><circle cx="31" cy="31" r="6" fill="#ff5a3c"/><rect x="6" y="9" width="5" height="11" rx="2" fill="#fff"/><rect x="29" y="9" width="5" height="11" rx="2" fill="#fff"/><rect x="10" y="12.5" width="20" height="4" rx="2" fill="#fff"/><rect x="18" y="14" width="4.5" height="19" rx="2.2" fill="#fff"/></symbol>
+</svg>
+
+<header class="top"><div class="wrap">
+  <a class="logo" href="#home" aria-label="TrainMe home"><svg><use href="#logo"/></svg><span>Train<b>Me</b></span></a>
+  <nav class="nav" id="nav"></nav>
+</div></header>
+
+<main>
+<!-- HOME -->
+<section data-view="home">
+  <div class="hero">
+    <svg class="scene" id="scene" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+    <div class="wrap"><div class="hero-text">
+      <h1>A world-class coach in your pocket. Free.</h1>
+      <p>Tell TrainMe your goal. Get a training and meal plan built on proven sports science, shaped to your body, your week and your kitchen.</p>
+      <div class="row">
+        <button class="btn btn-cta" data-go="goals">Achieve your dream physique</button>
+        <button class="btn btn-ghost" data-scroll="how">How it works</button>
+      </div>
+      <p class="note">Takes about 4 minutes. No credit card, ever.</p>
+    </div></div>
+  </div>
+
+  <div class="band" id="how"><div class="wrap">
+    <h2>Your coach, in three steps</h2>
+    <div class="steps">
+      <div class="step"><svg><use href="#i-clip"/></svg><h3>Tell us about you</h3><p>Goal, body, schedule, equipment and any injuries. Everything a good PT asks at your first session.</p></div>
+      <div class="step"><svg><use href="#i-plate"/></svg><h3>Pick your food</h3><p>Diet, allergies, foods you love and hate. Meals use ingredients from Woolies, Coles and Aldi.</p></div>
+      <div class="step"><svg><use href="#i-cal"/></svg><h3>Train with your plan</h3><p>Week-by-week workouts with form videos, recipes, a shopping list and a coach to answer questions.</p></div>
+    </div>
+  </div></div>
+
+  <div class="band sci" id="science"><div class="wrap">
+    <h2>Built on research, not trends</h2>
+    <p class="lead">Every number in your plan comes from peer-reviewed sports science and the methods top coaches use with their clients.</p>
+    <div class="facts">
+      <div class="fact"><div class="big">1.6–2.2 g</div><div class="what">protein per kg each day</div><div class="src">Morton et al., British Journal of Sports Medicine, 2018; ISSN position stand, 2017</div></div>
+      <div class="fact"><div class="big">10–20 sets</div><div class="what">per muscle each week builds muscle</div><div class="src">Schoenfeld, Ogborn &amp; Krieger, Journal of Sports Sciences, 2017</div></div>
+      <div class="fact"><div class="big">0.5–1%</div><div class="what">of body weight lost a week keeps muscle</div><div class="src">Helms, Aragon &amp; Fitschen, JISSN, 2014</div></div>
+      <div class="fact"><div class="big">1–3 reps</div><div class="what">left in the tank, then add weight</div><div class="src">ACSM progression models position stand, 2009</div></div>
+      <div class="fact"><div class="big">7–9 hours</div><div class="what">of sleep for recovery and appetite</div><div class="src">Watson et al., AASM &amp; SRS consensus, 2015</div></div>
+      <div class="fact"><div class="big">150–300 min</div><div class="what">of activity a week for long-term health</div><div class="src">Australia's Physical Activity Guidelines</div></div>
+    </div>
+    <p class="who">Plans follow methods published by researchers and coaches such as Brad Schoenfeld, Eric Helms, Stuart Phillips, Alan Aragon and Layne Norton. TrainMe is independent and not affiliated with them.</p>
+  </div></div>
+
+  <div class="band"><div class="wrap">
+    <h2>Everything a PT gives you</h2>
+    <div class="feat">
+      <div><svg><use href="#i-dumb"/></svg><b>Training that fits</b><span class="mut">Built for your days, session length and equipment: gym, dumbbells or none.</span></div>
+      <div><svg><use href="#i-play"/></svg><b>Form videos</b><span class="mut">A demo for every exercise, plus a one-line coaching cue.</span></div>
+      <div><svg><use href="#i-leaf"/></svg><b>Meals that hit your numbers</b><span class="mut">Portions scaled to your calories and protein, with full recipes.</span></div>
+      <div><svg><use href="#i-swapc"/></svg><b>Swap anything</b><span class="mut">Don't like an exercise or meal? One tap for a matching alternative.</span></div>
+      <div><svg><use href="#i-cart"/></svg><b>Weekly shopping list</b><span class="mut">Grouped by supermarket aisle, with amounts for the whole week.</span></div>
+      <div><svg><use href="#i-mailc"/></svg><b>Plan in your inbox</b><span class="mut">Email your full plan, videos and recipes to yourself.</span></div>
+    </div>
+  </div></div>
+
+  <div class="band close"><div class="wrap">
+    <div><h2>Your best shape starts this week</h2><p style="margin-top:6px">Answer a few questions and get your plan in minutes.</p></div>
+    <button class="btn btn-cta" data-go="goals">Achieve your dream physique</button>
+  </div></div>
+</section>
+
+<!-- SIGN UP -->
+<section data-view="signup" class="formpage" hidden><div class="col narrow">
+  <div class="authcard">
+    <div class="authstrip"><svg class="mini" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"></svg></div>
+    <h1>Create your account</h1>
+    <p class="mut" id="su-why">Save your plan and get it by email.</p>
+    <form id="f-signup" novalidate>
+      <div class="field"><label for="su-name">Name</label><input id="su-name" type="text" autocomplete="name" required></div>
+      <div class="field"><label for="su-email">Email</label><input id="su-email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="su-phone">Mobile number</label><input id="su-phone" type="tel" autocomplete="tel" placeholder="0412 345 678" required></div>
+      <div class="field"><label for="su-pass">Password</label><div class="pw"><input id="su-pass" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-pw="su-pass">Show</button></div><span class="small mut">At least 8 characters</span></div>
+      <p class="err" id="su-err" role="alert"></p>
+      <button class="btn btn-go" type="submit" style="width:100%;margin-top:14px">Sign up</button>
+    </form>
+    <p class="small" style="margin-top:16px">Already have an account? <a href="#login">Log in</a></p>
+  </div>
+</div></section>
+
+<!-- LOG IN -->
+<section data-view="login" class="formpage" hidden><div class="col narrow">
+  <div class="authcard">
+    <div class="authstrip"><svg class="mini" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"></svg></div>
+    <h1>Welcome back</h1>
+    <p class="mut" id="li-why">Log in to see your plan.</p>
+    <form id="f-login" novalidate>
+      <div class="field"><label for="li-email">Email</label><input id="li-email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="li-pass">Password</label><div class="pw"><input id="li-pass" type="password" autocomplete="current-password" required><button type="button" data-pw="li-pass">Show</button></div></div>
+      <p class="err" id="li-err" role="alert"></p>
+      <button class="btn btn-go" type="submit" style="width:100%;margin-top:14px">Log in</button>
+    </form>
+    <p class="small" style="margin-top:16px">New to TrainMe? <a href="#signup">Create an account</a></p>
+  </div>
+</div></section>
+
+<!-- GOALS QUESTIONNAIRE -->
+<section data-view="goals" class="formpage" hidden><div class="col">
+  <div class="stepper"><span class="on">Your goals</span><span>Meals</span><span>Your plan</span></div>
+  <h1>Achieve your dream physique</h1>
+  <p class="mut" style="margin-top:8px">Answer like you would at a first PT session. It takes about 3 minutes.</p>
+  <form id="f-goals" novalidate>
+    <div class="panel"><h3>About you</h3>
+      <div class="field"><span class="lbl">Gender</span><div class="chips" data-name="gender" data-opts="m:Male|f:Female|x:Prefer not to say"></div></div>
+      <div class="grid3">
+        <div class="field"><label for="g-age">Age</label><div class="unit"><input id="g-age" name="age" type="number" inputmode="numeric" min="16" max="90"><i>yrs</i></div></div>
+        <div class="field"><label for="g-height">Height</label><div class="unit"><input id="g-height" name="height" type="number" inputmode="decimal" min="120" max="230"><i>cm</i></div></div>
+        <div class="field"><label for="g-weight">Current weight</label><div class="unit"><input id="g-weight" name="weight" type="number" inputmode="decimal" min="35" max="250" step="0.1"><i>kg</i></div></div>
+      </div>
+    </div>
+    <div class="panel"><h3>Your physique goal</h3><p class="mut">Pick the one that matters most right now.</p>
+      <div class="chips goals" data-name="goal" data-opts="shred:Lean &amp; shredded~Lose fat, show definition|muscle:Build muscle~Add size and shape|tone:Tone up~Lose some fat, firm up|strength:Get stronger~Lift heavier|health:Fit &amp; healthy~Feel better, move well|athletic:Athletic~Fitter, faster, more power"></div>
+      <div class="grid2">
+        <div class="field"><label for="g-goalw">Goal weight <span class="mut small">(optional)</span></label><div class="unit"><input id="g-goalw" name="goalw" type="number" inputmode="decimal" min="35" max="250" step="0.1"><i>kg</i></div></div>
+        <div class="field"><span class="lbl">How fast?</span><div class="chips" data-name="pace" data-opts="steady:Steady|moderate:Moderate|fast:Faster"></div></div>
+      </div>
+    </div>
+    <div class="panel"><h3>Experience &amp; equipment</h3>
+      <div class="field"><span class="lbl">Training experience</span><div class="chips" data-name="exp" data-opts="beginner:New or under 6 months|intermediate:6 months to 2 years|advanced:2+ years consistent"></div></div>
+      <div class="field"><span class="lbl">Where will you train?</span><div class="chips" data-name="where" data-opts="g:Full gym|d:Home with dumbbells|b:Bodyweight only"></div></div>
+    </div>
+    <div class="panel"><h3>Your schedule</h3><p class="mut">Choose the days you can realistically train every week.</p>
+      <div class="field"><span class="lbl">Training days</span><div class="chips" data-name="days" data-type="checkbox" data-opts="0:Mon|1:Tue|2:Wed|3:Thu|4:Fri|5:Sat|6:Sun"></div></div>
+      <div class="field"><span class="lbl">Time per session</span><div class="chips" data-name="len" data-opts="30:30 min|45:45 min|60:60 min|75:75 min|90:90 min"></div></div>
+      <div class="field"><span class="lbl">Best time of day</span><div class="chips" data-name="time" data-opts="morning:Morning|midday:Lunchtime|evening:Evening|varies:It varies"></div></div>
+    </div>
+    <div class="panel"><h3>Lifestyle</h3><p class="mut">Recovery happens outside the gym, so this shapes your calories and volume.</p>
+      <div class="field"><span class="lbl">Your day job</span><div class="chips" data-name="job" data-opts="desk:Mostly sitting|feet:On my feet|physical:Physical work"></div></div>
+      <div class="field"><span class="lbl">Sleep most nights</span><div class="chips" data-name="sleep" data-opts="lt6:Under 6 h|6:6–7 h|7:7–8 h|8:8 h +"></div></div>
+      <div class="field"><span class="lbl">Stress level</span><div class="chips" data-name="stress" data-opts="low:Low|med:Moderate|high:High"></div></div>
+    </div>
+    <div class="panel"><h3>Focus areas <span class="mut small">(optional)</span></h3><p class="mut">We'll add extra work for these.</p>
+      <div class="chips" data-name="focus" data-type="checkbox" data-opts="glutes:Glutes|legs:Legs|chest:Chest|back:Back|shoulders:Shoulders|arms:Arms|core:Core"></div>
+    </div>
+    <div class="panel"><h3>Health check</h3><p class="mut">Tick anything that applies. We adjust exercises around it.</p>
+      <div class="chips" data-name="health" data-type="checkbox" data-opts="heart:Heart condition or chest pain|bp:High blood pressure|diabetes:Diabetes|asthma:Asthma|knee:Knee pain or injury|back:Lower back pain|shoulder:Shoulder pain or injury|pregnant:Pregnant or postpartum|surgery:Surgery in the last 6 months|none:None of these"></div>
+      <div class="field"><label for="g-notes">Anything else your coach should know?</label><textarea id="g-notes" name="notes" placeholder="Medications, old injuries, events you're training for…"></textarea></div>
+    </div>
+    <p class="err" id="g-err" role="alert"></p>
+    <div class="formend">
+      <button class="btn btn-cta" type="button" id="to-meals">Meal plan</button>
+      <button class="btn btn-ghost" type="button" id="skip-plan">Skip, generate plan</button>
+    </div>
+  </form>
+</div></section>
+
+<!-- MEAL QUESTIONNAIRE -->
+<section data-view="meals" class="formpage" hidden><div class="col">
+  <div class="stepper"><span class="done">Your goals</span><span class="on">Meals</span><span>Your plan</span></div>
+  <h1>Build your meal plan</h1>
+  <p class="mut" style="margin-top:8px" id="m-intro">Meals are scaled to your calorie and protein targets.</p>
+  <form id="f-meals" novalidate>
+    <div class="panel"><h3>How you eat</h3>
+      <div class="field"><span class="lbl">Eating style</span><div class="chips" data-name="diet" data-opts="any:No preference|veg:Vegetarian|vegan:Vegan|pesc:Pescatarian|halal:Halal"></div></div>
+      <div class="field"><span class="lbl">Allergies or intolerances</span><div class="chips" data-name="allergies" data-type="checkbox" data-opts="gluten:Gluten|dairy:Dairy|egg:Eggs|nuts:Nuts &amp; peanuts|fish:Fish|shellfish:Shellfish|soy:Soy|sesame:Sesame"></div></div>
+    </div>
+    <div class="panel"><h3>Foods you love</h3><p class="mut">We'll use these more often.</p>
+      <div class="chips" data-name="likes" data-type="checkbox" data-opts="chicken:Chicken|beef:Beef &amp; kangaroo|fish:Fish|prawns:Prawns|eggs:Eggs|tofu:Tofu &amp; tempeh|legumes:Beans &amp; lentils|rice:Rice &amp; grains|pasta:Pasta &amp; noodles|potato:Potato|oats:Oats &amp; cereal|yoghurt:Yoghurt|avocado:Avocado|mushrooms:Mushrooms|spicy:Spicy food|peanut:Peanut butter &amp; nuts"></div>
+    </div>
+    <div class="panel"><h3>Foods you'd rather skip</h3><p class="mut">We'll leave these out.</p>
+      <div class="chips" data-name="dislikes" data-type="checkbox" data-opts="chicken:Chicken|beef:Beef &amp; kangaroo|fish:Fish|prawns:Prawns|eggs:Eggs|tofu:Tofu &amp; tempeh|legumes:Beans &amp; lentils|rice:Rice &amp; grains|pasta:Pasta &amp; noodles|potato:Potato|oats:Oats &amp; cereal|yoghurt:Yoghurt|avocado:Avocado|mushrooms:Mushrooms|spicy:Spicy food|peanut:Peanut butter &amp; nuts"></div>
+    </div>
+    <div class="panel"><h3>Your routine</h3>
+      <div class="field"><span class="lbl">Meals a day</span><div class="chips" data-name="meals" data-opts="3:3 meals|4:3 meals + snack|5:3 meals + 2 snacks"></div></div>
+      <div class="field"><span class="lbl">Cooking time</span><div class="chips" data-name="cook" data-opts="15:Under 15 min|30:Under 30 min|any:Happy to cook"></div></div>
+      <div class="field"><span class="lbl">Prep style</span><div class="chips" data-name="prep" data-opts="daily:Cook fresh each day|batch:Batch-prep a few times a week"></div></div>
+      <div class="field"><span class="lbl">Weekly food budget</span><div class="chips" data-name="budget" data-opts="tight:Tight|moderate:Moderate|flexible:Flexible"></div></div>
+    </div>
+    <p class="err" id="m-err" role="alert"></p>
+    <div class="formend"><button class="btn btn-cta" type="button" id="gen-plan">Generate plan</button><a class="btn btn-ghost" href="#goals">Back</a></div>
+  </form>
+</div></section>
+
+<!-- PLAN -->
+<section data-view="plan" hidden>
+  <div class="planhead"><div class="wrap" id="ph"></div></div>
+  <div class="wrap" id="pb"></div>
+  <div class="dock"><div class="wrap">
+    <span class="mut" id="dock-note"></span>
+    <a class="btn btn-ghost" href="#goals"><svg><use href="#i-edit"/></svg>Edit answers</a>
+    <button class="btn btn-cta" id="email-btn"><svg><use href="#i-mail"/></svg>Email plan</button>
+  </div></div>
+</section>
+</main>
+
+<footer id="foot"><div class="wrap">
+  <a class="logo" href="#home"><svg><use href="#logo"/></svg><span>Train<b>Me</b></span></a>
+  <p>TrainMe gives general fitness and nutrition guidance, not medical advice. Check with your GP before starting if you have a health condition, are pregnant or have been inactive for a long time. Stop any exercise that causes pain, dizziness or chest discomfort.</p>
+  <p>hello@trainme.com.au<br>Made in Sydney, 2026<br>Food photos from Unsplash</p>
+</div></footer>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="m-title"><div class="mbox">
+  <div class="mhead"><button class="btn btn-ghost btn-sm x" id="m-close">Close</button><h2 id="m-title" style="font-size:32px">Email your plan</h2><p class="mut" id="m-to"></p></div>
+  <div class="preview" id="m-prev"></div>
+  <div class="mfoot">
+    <div class="row">
+      <button class="btn btn-cta" id="m-send" hidden><svg><use href="#i-mail"/></svg>Send now</button>
+      <button class="btn btn-go" id="m-copy"><svg><use href="#i-copy"/></svg>Copy formatted email</button>
+      <a class="btn btn-ghost" id="m-open" href="#"><svg><use href="#i-mail"/></svg>Open email app</a>
+      <button class="btn btn-ghost" id="m-dl" hidden><svg><use href="#i-down"/></svg>Download plan</button>
+    </div>
+    <p class="small mut" id="m-help">Copy, then paste into a new email to yourself in Gmail or Outlook. The layout, links and videos come with it.</p>
+    <p class="status" id="m-status" role="status"></p>
+  </div>
+</div></div>
+<script>
+{
+// ---------- FOODS (per 100 g or 100 ml; values from Australian food composition data, rounded) ----------
+// key: [name, kcal, protein, carbs, fat, aisle, colour, allergens, kind]
+// aisles: P produce, M meat & seafood, D dairy & eggs, A pantry, F freezer, B bakery
+const FOODS = {
+  oats:['Rolled oats',379,13,60,7,'A','#d9b77e','gluten'],
+  weetbix:['Weet-Bix',360,12,67,1.4,'A','#c98f4a','gluten'],
+  milk:['Light milk',46,3.5,5,1.4,'D','#f4f1ea','dairy','dairy'],
+  soymilk:['Soy milk, unsweetened',40,3.3,1.5,2,'D','#efe6d2','soy'],
+  almondmilk:['Almond milk, unsweetened',17,0.5,0.5,1.3,'D','#efe6d6','nuts'],
+  yog:['Greek yoghurt, plain low-fat',65,9,4,1.5,'D','#f7f5ef','dairy','dairy'],
+  whey:['Whey protein powder',390,78,8,6,'A','#e8d9c0','dairy','dairy'],
+  pea:['Plant protein powder',380,75,8,6,'A','#d8c7a5',''],
+  banana:['Banana',89,1.1,23,0.3,'P','#f4d35e',''],
+  berries:['Frozen mixed berries',50,1,11,0.3,'F','#7b2d5b',''],
+  blueb:['Blueberries',57,0.7,14,0.3,'P','#3b4b9a',''],
+  apple:['Apple',52,0.3,14,0.2,'P','#d9483b',''],
+  egg:['Eggs',143,12.6,0.7,9.5,'D','#f6c945','egg','egg'],
+  eggw:['Liquid egg whites',48,11,0.7,0.2,'D','#fbf6e6','egg','egg'],
+  bread:['Wholegrain bread',247,11,41,3.5,'B','#b07a43','gluten'],
+  sourdough:['Sourdough',250,9,48,1.8,'B','#c4965c','gluten'],
+  wrap:['Wholemeal wraps',300,9,50,7,'B','#d8b98a','gluten'],
+  avo:['Avocado',160,2,8.5,15,'P','#7cb342',''],
+  pb:['Peanut butter',600,25,15,50,'A','#a86b32','nuts'],
+  almonds:['Almonds',580,21,22,50,'A','#b5835a','nuts'],
+  chia:['Chia seeds',486,17,42,31,'A','#3a3a3a',''],
+  honey:['Honey',304,0.3,82,0,'A','#e8a317','','honey'],
+  chicken:['Chicken breast',110,23,0,2,'M','#f2c9a0','','meat'],
+  thigh:['Chicken thigh fillets',125,19,0,5.5,'M','#e8b48a','','meat'],
+  mince:['Lean beef mince (5 star)',130,21,0,5,'M','#a3423a','','meat'],
+  steak:['Lean rump steak',125,22,0,4,'M','#8e3b32','','meat'],
+  roo:['Kangaroo mince',100,22,0,1.5,'M','#6e2a2a','','meat'],
+  salmon:['Salmon fillet',200,20,0,13,'M','#f08a5d','fish','fish'],
+  barra:['Barramundi fillet',95,20,0,1.5,'M','#f3e3d3','fish','fish'],
+  tuna:['Tuna in springwater, drained',105,24,0,1,'A','#d9a38c','fish','fish'],
+  prawns:['Raw prawns, peeled',85,19,0,1,'M','#f29e7d','shellfish','shell'],
+  tofu:['Firm tofu',120,12,2,7,'P','#f1e7c9','soy'],
+  tempeh:['Tempeh',190,19,9,11,'P','#c9a46a','soy'],
+  lentils:['Brown lentils, canned & drained',90,7,12,0.5,'A','#8a6a3e',''],
+  chickpeas:['Chickpeas, canned & drained',120,7,16,2.5,'A','#e0b96a',''],
+  beans:['Black beans, canned & drained',90,6,14,0.5,'A','#2f2a2a',''],
+  edamame:['Frozen edamame',120,11,8,5,'F','#6fae3c','soy'],
+  brownrice:['Brown rice, cooked',123,2.7,25.6,1,'A','#c8a675',''],
+  rice:['Basmati rice, cooked',130,2.7,28,0.3,'A','#f5f1e6',''],
+  quinoa:['Quinoa, cooked',120,4.4,21,1.9,'A','#e2cf9c',''],
+  pasta:['Wholemeal pasta, dry',350,13,65,2.5,'A','#c99b58','gluten'],
+  noodles:['Rice noodles, dry',360,6,80,0.8,'A','#f2ead6',''],
+  sweetpot:['Sweet potato',86,1.6,20,0.1,'P','#e07b39',''],
+  potato:['Potatoes',77,2,17,0.1,'P','#d8b56a',''],
+  broccoli:['Broccoli',34,3,4,0.4,'P','#2e7d32',''],
+  spinach:['Baby spinach',23,2.9,1.4,0.4,'P','#3f8f3a',''],
+  salad:['Mixed salad leaves',17,1.5,2,0.2,'P','#7fbf4d',''],
+  tomato:['Cherry tomatoes',18,0.9,3.9,0.2,'P','#e53935',''],
+  cucumber:['Lebanese cucumber',15,0.7,3,0.1,'P','#8bc34a',''],
+  capsicum:['Red capsicum',31,1,6,0.3,'P','#d32f2f',''],
+  carrot:['Carrot',41,0.9,9.6,0.2,'P','#f57c00',''],
+  zucchini:['Zucchini',17,1.2,3,0.3,'P','#558b2f',''],
+  onion:['Brown onion',40,1.1,9,0.1,'P','#e9d8b4',''],
+  garlic:['Garlic',149,6,33,0.5,'P','#f3eee0',''],
+  stirfry:['Frozen stir-fry vegetables',35,2,5,0.3,'F','#4caf50',''],
+  greenbeans:['Green beans',31,1.8,7,0.1,'P','#43a047',''],
+  mushroom:['Mushrooms',22,3,3,0.3,'P','#a1887f',''],
+  corn:['Frozen corn kernels',86,3.2,19,1.2,'F','#fbc02d',''],
+  oil:['Olive oil',884,0,0,100,'A','#c5b358',''],
+  feta:['Reduced-fat feta',230,18,1,17,'D','#fafafa','dairy','dairy'],
+  cottage:['Cottage cheese',90,12,3.5,3,'D','#f7f4ec','dairy','dairy'],
+  cheese:['Light tasty cheese, grated',310,29,0.5,21,'D','#f9c74f','dairy','dairy'],
+  salsa:['Tomato salsa',30,1,6,0.2,'A','#c62828',''],
+  soy:['Salt-reduced soy sauce',60,8,6,0,'A','#3e2723','soy gluten'],
+  hummus:['Hummus',270,7,12,22,'P','#e6c88f','sesame'],
+  ricecakes:['Rice cakes',380,8,80,3,'A','#efe3c4',''],
+  passata:['Tomato passata',30,1.3,5,0.2,'A','#b71c1c',''],
+  coconut:['Light coconut milk',85,1,3,8,'A','#f5f5f0',''],
+  curry:['Tikka curry paste',150,2,10,11,'A','#d84315',''],
+  lemon:['Lemon or lime juice',29,1.1,9,0.3,'P','#f4e04d',''],
+  spice:['Herbs & spices',250,10,50,5,'A','#8d6e63','']
+};
+const LIQUIDS = new Set(['milk','soymilk','almondmilk','eggw','passata','coconut','soy','oil','lemon']);
+const AISLES = {P:'Fruit & veg',M:'Meat & seafood',D:'Dairy, eggs & fridge',A:'Pantry',F:'Freezer',B:'Bakery'};
+
+// ---------- MEALS (base portion; scaled to each person's calorie target) ----------
+// t: b breakfast, l lunch, d dinner, s snack. min = hands-on + cook time.
+const MEALS = [
+ {id:'b1',n:'Overnight protein oats',t:'b',min:5,ing:[['oats',60],['milk',200],['whey',30],['chia',10],['berries',80]],st:['Stir oats, milk, protein powder and chia in a jar.','Top with berries, seal and refrigerate overnight.','Eat cold, or microwave for 2 minutes.']},
+ {id:'b2',n:'Peanut butter banana oats',t:'b',min:8,ing:[['oats',60],['soymilk',250],['pea',30],['banana',100],['pb',10]],st:['Simmer oats in soy milk for 4–5 minutes, stirring.','Take off the heat and stir in protein powder.','Top with sliced banana and peanut butter.']},
+ {id:'b3',n:'Scrambled eggs on sourdough',t:'b',min:10,ing:[['egg',150],['sourdough',80],['spinach',40],['tomato',80],['oil',5]],st:['Whisk eggs with a pinch of salt and pepper.','Wilt spinach in the oil, add eggs and stir gently over low heat.','Serve on toasted sourdough with halved tomatoes.']},
+ {id:'b4',n:'Greek yoghurt berry bowl',t:'b',min:3,ing:[['yog',250],['berries',100],['oats',30],['almonds',15],['honey',10]],st:['Spoon yoghurt into a bowl.','Top with thawed berries, oats and chopped almonds.','Drizzle with honey.']},
+ {id:'b5',n:'Weet-Bix with yoghurt & banana',t:'b',min:3,ing:[['weetbix',45],['milk',250],['yog',150],['banana',100]],st:['Crumble 3 Weet-Bix into a bowl and add milk.','Top with yoghurt and sliced banana.']},
+ {id:'b6',n:'Egg-white veggie omelette',t:'b',min:12,ing:[['egg',100],['eggw',150],['mushroom',60],['capsicum',50],['spinach',30],['cheese',20],['bread',70]],st:['Sauté mushroom and capsicum in a non-stick pan for 3 minutes.','Pour in whisked eggs and egg whites, add spinach.','Sprinkle cheese, fold and serve with toast.']},
+ {id:'b7',n:'Tofu scramble wrap',t:'b',min:12,ing:[['tofu',180],['wrap',60],['spinach',40],['tomato',60],['capsicum',50],['spice',3],['oil',5]],st:['Crumble tofu into a hot oiled pan with capsicum.','Season with turmeric, paprika, salt and pepper; cook 5 minutes.','Add spinach and tomato, then roll in a warm wrap.']},
+ {id:'b8',n:'Smashed avo & eggs',t:'b',min:10,ing:[['bread',80],['avo',60],['egg',100],['feta',20],['lemon',10]],st:['Poach or fry 2 eggs.','Mash avocado with lemon, salt and pepper.','Spread on toast, top with eggs and crumbled feta.']},
+ {id:'b9',n:'Banana protein smoothie',t:'b',min:5,ing:[['milk',300],['whey',30],['banana',120],['oats',30],['pb',15]],st:['Add everything to a blender with a handful of ice.','Blend for 45 seconds until smooth.']},
+ {id:'b10',n:'Cottage cheese & berry toast',t:'b',min:5,ing:[['bread',70],['cottage',150],['blueb',80],['almonds',10],['honey',10]],st:['Toast the bread.','Spread with cottage cheese and top with blueberries.','Finish with chopped almonds and a drizzle of honey.']},
+
+ {id:'b11',n:'Berry chia pudding',t:'b',min:5,ing:[['almondmilk',250],['chia',25],['pea',25],['oats',20],['berries',80]],st:['Whisk almond milk, chia and protein powder in a jar.','Stir in oats, refrigerate overnight.','Top with berries in the morning.']},
+ {id:'b12',n:'Sweet potato & egg hash',t:'b',min:15,ing:[['egg',150],['sweetpot',200],['spinach',40],['capsicum',50],['oil',5]],st:['Dice sweet potato small and microwave 4 minutes.','Fry in oil with capsicum until crisp, about 6 minutes.','Make 3 wells, crack in eggs, add spinach, cover and cook 4 minutes.']},
+
+ {id:'l1',n:'Chicken, rice & broccoli bowl',t:'l',min:25,ing:[['chicken',160],['brownrice',180],['broccoli',120],['oil',5],['soy',10]],st:['Season chicken and pan-fry in oil 5–6 minutes each side.','Steam broccoli for 4 minutes and heat the rice.','Slice chicken over rice and greens, splash with soy.'],prep:1},
+ {id:'l2',n:'Tuna salad wrap',t:'l',min:8,ing:[['tuna',95],['wrap',60],['salad',40],['tomato',60],['cucumber',60],['avo',30],['cheese',15],['lemon',10]],st:['Mix tuna with lemon juice and pepper.','Layer leaves, tomato, cucumber, avocado and cheese on the wrap.','Add tuna, roll tightly and slice in half.']},
+ {id:'l3',n:'Chicken & hummus wrap',t:'l',min:15,ing:[['chicken',130],['wrap',60],['hummus',30],['salad',40],['capsicum',50]],st:['Grill or pan-fry chicken, then slice.','Spread hummus on the wrap.','Add leaves, capsicum and chicken; roll up.'],prep:1},
+ {id:'l4',n:'Lentil, sweet potato & feta salad',t:'l',min:30,ing:[['lentils',200],['sweetpot',200],['spinach',50],['feta',30],['oil',8],['lemon',10]],st:['Cube sweet potato, toss with half the oil and roast at 200°C for 25 minutes.','Rinse lentils and toss with spinach.','Top with sweet potato and feta, dress with lemon and remaining oil.'],prep:1},
+ {id:'l5',n:'Chickpea quinoa power bowl',t:'l',min:15,ing:[['chickpeas',150],['quinoa',150],['edamame',80],['cucumber',60],['tomato',80],['hummus',20],['lemon',10]],st:['Microwave edamame for 2 minutes.','Combine quinoa, chickpeas, edamame, cucumber and tomato.','Top with hummus and a squeeze of lemon.'],prep:1},
+ {id:'l6',n:'Beef burrito bowl',t:'l',min:20,ing:[['mince',140],['rice',150],['beans',100],['corn',60],['salsa',60],['salad',40],['cheese',15]],st:['Brown mince with cumin, paprika and a pinch of salt.','Warm beans and corn.','Build bowl: rice, leaves, beef, beans, corn, salsa and cheese.'],prep:1},
+ {id:'l7',n:'Salmon & sweet potato salad',t:'l',min:25,ing:[['salmon',130],['sweetpot',200],['salad',50],['cucumber',60],['lemon',10]],st:['Roast cubed sweet potato at 200°C for 20 minutes.','Bake salmon on the same tray for the last 12 minutes.','Serve over leaves and cucumber with lemon.']},
+ {id:'l8',n:'Teriyaki tofu noodle bowl',t:'l',min:20,ing:[['tofu',180],['noodles',70],['stirfry',150],['edamame',50],['soy',15]],st:['Soak noodles in boiling water for 5 minutes, then drain.','Pan-fry cubed tofu until golden, add veg and edamame for 4 minutes.','Toss through noodles with soy sauce and a little honey or maple.'],prep:1},
+ {id:'l9',n:'Prawn rice noodle salad',t:'l',min:15,ing:[['prawns',150],['noodles',60],['cucumber',60],['carrot',60],['salad',40],['lemon',15],['soy',10],['oil',5]],st:['Cook prawns in oil for 2–3 minutes until pink.','Soak noodles, drain and cool.','Toss with shredded carrot, cucumber and leaves; dress with lime and soy.']},
+ {id:'l10',n:'Egg & potato salad',t:'l',min:20,ing:[['egg',150],['potato',250],['greenbeans',100],['salad',40],['yog',50]],st:['Boil cubed potato 12 minutes; add beans for the last 3.','Boil eggs for 8 minutes, cool and halve.','Toss with leaves and a yoghurt, mustard and pepper dressing.'],prep:1},
+
+ {id:'l11',n:'Roast veg & lentil salad',t:'l',min:30,ing:[['lentils',200],['sweetpot',150],['capsicum',80],['spinach',50],['oil',8],['lemon',10]],st:['Roast cubed sweet potato and capsicum with oil at 200°C for 25 minutes.','Toss with rinsed lentils and spinach.','Dress with lemon, salt and pepper.'],prep:1},
+
+ {id:'d1',n:'Lemon garlic chicken & potatoes',t:'d',min:35,ing:[['chicken',170],['potato',250],['greenbeans',120],['oil',8],['garlic',5],['lemon',15]],st:['Toss halved potatoes with half the oil and roast at 210°C for 30 minutes.','Rub chicken with garlic, lemon and remaining oil; roast for the last 18 minutes.','Steam beans and serve together.']},
+ {id:'d2',n:'Beef & veg stir-fry',t:'d',min:20,ing:[['steak',150],['stirfry',200],['rice',160],['soy',15],['garlic',5],['oil',5]],st:['Slice steak thinly and sear in hot oil for 2 minutes; set aside.','Stir-fry veg and garlic for 4 minutes.','Return beef, add soy and serve over rice.']},
+ {id:'d3',n:'Baked barramundi with rice & salad',t:'d',min:20,ing:[['barra',180],['rice',160],['salad',50],['tomato',80],['cucumber',60],['lemon',15],['oil',5]],st:['Brush barramundi with oil, season and bake at 200°C for 12–15 minutes.','Toss salad with tomato, cucumber and lemon.','Serve with rice.']},
+ {id:'d4',n:'Kangaroo bolognese',t:'d',min:30,ing:[['roo',150],['pasta',80],['passata',200],['onion',60],['carrot',60],['zucchini',80],['garlic',5],['cheese',10]],st:['Sauté diced onion, carrot and zucchini for 5 minutes.','Add kangaroo mince and garlic; brown for 4 minutes (it is lean, so don\'t overcook).','Add passata, simmer 10 minutes and serve over pasta with cheese.'],prep:1},
+ {id:'d5',n:'Chicken tikka curry',t:'d',min:30,ing:[['thigh',160],['curry',30],['yog',60],['onion',60],['spinach',60],['rice',150]],st:['Fry sliced onion until soft, then add curry paste for 1 minute.','Add diced chicken and cook 6 minutes; stir in a splash of water and simmer 10 minutes.','Off the heat, stir in yoghurt and spinach. Serve with rice.'],prep:1},
+ {id:'d6',n:'Soy-glazed salmon & quinoa',t:'d',min:20,ing:[['salmon',140],['quinoa',150],['broccoli',150],['soy',10],['lemon',10]],st:['Brush salmon with soy and bake at 200°C for 12 minutes.','Steam broccoli for 4 minutes.','Serve over quinoa with lemon.']},
+ {id:'d7',n:'Lentil & mushroom bolognese',t:'d',min:30,ing:[['lentils',200],['pasta',70],['passata',200],['onion',60],['carrot',60],['mushroom',100],['garlic',5],['oil',5]],st:['Sauté onion, carrot and mushroom in oil for 6 minutes.','Add garlic, lentils and passata; simmer 12 minutes.','Serve over pasta.'],prep:1},
+ {id:'d8',n:'Tofu coconut curry',t:'d',min:25,ing:[['tofu',200],['coconut',120],['curry',25],['greenbeans',80],['capsicum',80],['rice',150]],st:['Fry curry paste for 1 minute, then add coconut milk.','Add cubed tofu, beans and capsicum; simmer 10 minutes.','Serve with rice.'],prep:1},
+ {id:'d9',n:'Beef & bean chilli with sweet potato',t:'d',min:35,ing:[['mince',150],['beans',120],['passata',150],['onion',60],['capsicum',60],['spice',5],['sweetpot',200]],st:['Prick sweet potato and microwave 8–10 minutes until soft.','Brown mince with onion, capsicum, cumin, paprika and chilli.','Add beans and passata, simmer 10 minutes; spoon over split sweet potato.'],prep:1},
+ {id:'d10',n:'Chicken fajitas',t:'d',min:20,ing:[['chicken',150],['wrap',80],['capsicum',100],['onion',60],['avo',40],['salsa',40],['spice',4],['oil',5]],st:['Slice chicken, capsicum and onion; toss with oil and fajita spice.','Cook in a hot pan for 8 minutes.','Serve in warm wraps with avocado and salsa.']},
+ {id:'d11',n:'Tempeh veggie stir-fry',t:'d',min:20,ing:[['tempeh',150],['stirfry',200],['brownrice',150],['soy',15],['garlic',5]],st:['Slice tempeh and pan-fry until golden.','Add veg and garlic; stir-fry 4 minutes.','Add soy sauce and serve over brown rice.']},
+ {id:'d12',n:'Prawn & egg fried rice',t:'d',min:20,ing:[['prawns',150],['egg',50],['rice',180],['stirfry',150],['soy',15],['oil',5]],st:['Scramble the egg in a hot oiled wok and set aside.','Cook prawns 2 minutes, add veg for 3 minutes.','Add cold rice, egg and soy; toss until hot.']},
+
+ {id:'s1',n:'Greek yoghurt & berries',t:'s',min:2,ing:[['yog',200],['berries',80]],st:['Top yoghurt with thawed berries.']},
+ {id:'s2',n:'Apple & peanut butter',t:'s',min:2,ing:[['apple',150],['pb',15]],st:['Slice apple and dip in peanut butter.']},
+ {id:'s3',n:'Protein shake',t:'s',min:2,ing:[['milk',250],['whey',30]],st:['Shake protein powder with cold milk.']},
+ {id:'s4',n:'Rice cakes with cottage cheese',t:'s',min:3,ing:[['ricecakes',20],['cottage',100],['tomato',60]],st:['Top 2 rice cakes with cottage cheese and sliced tomato, plus pepper.']},
+ {id:'s5',n:'Hummus & veggie sticks',t:'s',min:5,ing:[['hummus',40],['carrot',100],['cucumber',100],['capsicum',60]],st:['Cut veg into sticks and dip in hummus.']},
+ {id:'s6',n:'Boiled eggs & almonds',t:'s',min:10,ing:[['egg',100],['almonds',10]],st:['Boil 2 eggs for 8 minutes (or prep a batch).','Eat with a small handful of almonds.']},
+ {id:'s7',n:'Salted edamame',t:'s',min:4,ing:[['edamame',150],['lemon',5]],st:['Microwave edamame for 3 minutes, season with salt and lemon.']},
+ {id:'s8',n:'Banana & almonds',t:'s',min:1,ing:[['banana',120],['almonds',15]],st:['Grab and go.']},
+ {id:'s9',n:'Plant protein berry shake',t:'s',min:3,ing:[['soymilk',250],['pea',30],['berries',60]],st:['Blend soy milk, protein powder and berries with ice.']},
+ {id:'s10',n:'Tuna on rice cakes',t:'s',min:3,ing:[['tuna',95],['ricecakes',20],['tomato',40]],st:['Top 2 rice cakes with tuna, tomato and cracked pepper.']}
+];
+
+// ---------- EXERCISES ----------
+// p pattern, eq where available (g gym, d home dumbbells, b bodyweight), c compound, av avoid with (knee/back/shoulder), cue form tip, sec = timed
+const EX = [
+ ['bbsquat','Barbell back squat','squat','g',1,'knee back','Brace hard, sit between your hips, knees track over toes.'],
+ ['legpress','Leg press','squat','g',1,'','Lower until your hips start to tuck, push through mid-foot.'],
+ ['goblet','Goblet squat','squat','gd',1,'','Hold the weight at your chest, chest up, sit deep.'],
+ ['hack','Hack squat','squat','g',1,'knee','Feet mid-platform, control the lowering for 2–3 seconds.'],
+ ['boxsquat','Box squat to a chair','squat','gdb',1,'','Sit back to the box, light touch, stand tall.'],
+ ['tempo','Tempo bodyweight squat','squat','gdb',1,'','3 seconds down, 1 second pause, drive up.'],
+ ['rdl','Barbell Romanian deadlift','hinge','g',1,'','Hips back, soft knees, bar close to your legs.'],
+ ['dbrdl','Dumbbell Romanian deadlift','hinge','gd',1,'','Push hips back until you feel a hamstring stretch, then squeeze up.'],
+ ['deadlift','Conventional deadlift','hinge','g',1,'back','Bar over mid-foot, brace, push the floor away.'],
+ ['slrdl','Single-leg Romanian deadlift','hinge','gdb',1,'','Hips square, reach the free leg back, move slowly.'],
+ ['backext','45° back extension','hinge','g',0,'','Round slightly over the pad, squeeze glutes to rise.'],
+ ['hipthrust','Barbell hip thrust','glute','g',1,'','Chin tucked, ribs down, pause 1 second at the top.'],
+ ['dbthrust','Dumbbell hip thrust','glute','gd',1,'','Shoulders on a bench, drive through heels, squeeze at the top.'],
+ ['bridge','Glute bridge','glute','gdb',0,'','Press heels down, lift hips until knees, hips and shoulders line up.'],
+ ['slbridge','Single-leg glute bridge','glute','gdb',0,'','Keep hips level as you lift; pause at the top.'],
+ ['kickback','Cable glute kickback','glute','g',0,'','Slight forward lean, kick back and squeeze, no lower-back arch.'],
+ ['bss','Bulgarian split squat','lunge','gdb',1,'knee','Back foot on a bench, drop straight down, front heel planted.'],
+ ['revlunge','Reverse lunge','lunge','gdb',1,'','Step back, drop the back knee, drive through the front heel.'],
+ ['walklunge','Walking lunge','lunge','gdb',1,'knee','Long steps, upright torso, control each step.'],
+ ['stepup','Step-up','lunge','gdb',1,'','Whole foot on the step; drive up without pushing off the back leg.'],
+ ['legext','Leg extension','quad','g',0,'','Pause 1 second at the top, lower slowly.'],
+ ['heelgoblet','Heel-elevated goblet squat','quad','gd',0,'','Heels on a plate, upright torso, knees travel forward.'],
+ ['wallsit','Wall sit','quad','gdb',0,'','Thighs parallel to the floor, back flat on the wall.',1],
+ ['lyingcurl','Lying leg curl','ham','g',0,'','Hips pressed down, curl fully, lower over 3 seconds.'],
+ ['seatedcurl','Seated leg curl','ham','g',0,'','Lean forward slightly for a bigger stretch.'],
+ ['slidecurl','Sliding leg curl (towel)','ham','gdb',0,'','Hips up, pull heels in on a towel on a smooth floor.'],
+ ['calfmach','Standing calf raise','calf','g',0,'','Full stretch at the bottom, pause at the top.'],
+ ['slcalf','Single-leg calf raise on a step','calf','gdb',0,'','Hold a rail, lower slowly below the step, rise high.'],
+ ['seatcalf','Seated calf raise','calf','g',0,'','Pause in the stretch for 1–2 seconds every rep.'],
+ ['bench','Barbell bench press','hpush','g',1,'shoulder','Shoulder blades pinched, feet planted, bar to lower chest.'],
+ ['dbbench','Dumbbell bench press','hpush','gd',1,'','Elbows about 45°, lower to chest level, press up and in.'],
+ ['chestpress','Machine chest press','hpush','g',1,'','Handles at mid-chest, control the return.'],
+ ['pushup','Push-up','hpush','gdb',1,'','Body in a straight line, chest to just above the floor.'],
+ ['incdb','Incline dumbbell press','incline','gd',1,'','Bench at 30°, lower to upper chest, press up.'],
+ ['incbb','Incline barbell press','incline','g',1,'shoulder','Bench at 30°, touch high on the chest.'],
+ ['cablefly','Cable fly','incline','g',0,'','Slight elbow bend, bring hands together like hugging a tree.'],
+ ['feetup','Feet-elevated push-up','incline','gdb',1,'','Feet on a chair, body straight, slow lowering.'],
+ ['dbohp','Seated dumbbell shoulder press','vpush','gd',1,'shoulder','Elbows slightly forward, press to just short of lockout.'],
+ ['ohp','Standing overhead press','vpush','g',1,'shoulder back','Squeeze glutes, press the bar straight up past your face.'],
+ ['machpress','Machine shoulder press','vpush','g',1,'shoulder','Back on the pad, press smoothly, no bouncing.'],
+ ['landmine','Landmine press','vpush','g',1,'','Press up and forward at an angle; shoulder-friendly.'],
+ ['pike','Pike push-up','vpush','gdb',1,'shoulder','Hips high, lower your head between your hands.'],
+ ['csrow','Chest-supported dumbbell row','hpull','gd',1,'','Chest on an incline bench, pull elbows towards hips.'],
+ ['cablerow','Seated cable row','hpull','g',1,'','Tall chest, pull to your stomach, pause and squeeze.'],
+ ['bbrow','Barbell bent-over row','hpull','g',1,'back','Hinge to 45°, pull the bar to your belly button.'],
+ ['dbrow','One-arm dumbbell row','hpull','gd',1,'','Hand on bench, flat back, pull the dumbbell to your hip.'],
+ ['invrow','Inverted row under a sturdy table','hpull','gdb',1,'','Body straight, pull your chest up to the edge.'],
+ ['pulldown','Lat pulldown','vpull','g',1,'','Lean back slightly, pull the bar to your upper chest.'],
+ ['pullup','Pull-up (assisted if needed)','vpull','g',1,'','Start from a dead hang, chin over the bar, slow down.'],
+ ['ngpulldown','Neutral-grip pulldown','vpull','g',1,'','Palms facing, drive elbows down to your sides.'],
+ ['dbpullover','Dumbbell pullover','vpull','gd',0,'shoulder','Slight elbow bend, stretch back, pull over to your chest.'],
+ ['doorrow','Doorframe row','vpull','gdb',1,'','Hold a sturdy doorframe, lean back, pull chest to the frame.'],
+ ['dblat','Dumbbell lateral raise','lat','gd',0,'','Lead with elbows, raise to shoulder height, lower slowly.'],
+ ['cablelat','Cable lateral raise','lat','g',0,'','Cable behind you, sweep out to shoulder height.'],
+ ['ytw','Prone Y-T-W raise','lat','gdb',0,'','Lie face down, raise arms in Y, T and W shapes, thumbs up.'],
+ ['facepull','Face pull','rear','g',0,'','Rope to forehead, elbows high, pull the rope apart.'],
+ ['revfly','Reverse pec deck','rear','g',0,'','Arms nearly straight, sweep back, squeeze shoulder blades.'],
+ ['dbrevfly','Bent-over dumbbell reverse fly','rear','gd',0,'','Hinge forward, raise arms out wide, pinkies up.'],
+ ['tpraise','Prone T raise','rear','gdb',0,'','Face down, arms out like a T, lift and hold 1 second.'],
+ ['dbcurl','Dumbbell curl','bi','gd',0,'','Elbows pinned to your sides, no swinging.'],
+ ['inclcurl','Incline dumbbell curl','bi','gd',0,'','Arms hang behind you for a big stretch, curl up.'],
+ ['cablecurl','Cable curl','bi','g',0,'','Constant tension, squeeze hard at the top.'],
+ ['hammer','Hammer curl','bi','gd',0,'','Palms facing in, curl to shoulder height.'],
+ ['packcurl','Backpack curl','bi','gdb',0,'','Load a backpack with books, curl it by the top handle.'],
+ ['pushdown','Cable triceps pushdown','tri','g',0,'','Elbows pinned, push down to full lockout.'],
+ ['ohext','Overhead cable triceps extension','tri','g',0,'','Face away from the cable, stretch overhead, extend.'],
+ ['dbohext','Dumbbell overhead triceps extension','tri','gd',0,'','Lower the dumbbell behind your head, elbows in.'],
+ ['diamond','Close-grip push-up','tri','gdb',0,'','Hands under shoulders, elbows brush your sides.'],
+ ['benchdip','Bench dip','tri','gdb',0,'shoulder','Hands on a bench, lower to 90° at the elbow.'],
+ ['plank','Plank','core','gdb',0,'','Squeeze glutes, ribs down, straight line head to heel.',1],
+ ['deadbug','Dead bug','core','gdb',0,'','Lower back pressed down, opposite arm and leg reach slowly.'],
+ ['cablecrunch','Cable crunch','core','g',0,'','Kneel, curl your ribs towards your hips.'],
+ ['hkr','Hanging knee raise','core','g',0,'shoulder','Curl your pelvis up, no swinging.'],
+ ['pallof','Pallof press','core','g',0,'','Press the handle out and resist the twist.'],
+ ['sideplank','Side plank','core','gdb',0,'','Hips high, body in one line, hold.',1]
+].map(a=>({id:a[0],n:a[1],p:a[2],eq:a[3],c:!!a[4],av:a[5],cue:a[6],sec:!!a[7]}));
+
+// ---------- SESSION TEMPLATES (patterns in priority order; ":1" = second choice for variety) ----------
+const SESS = {
+ FA:{n:'Full body A',k:'full',p:['squat','hpush','hpull','hinge','lat','core','bi','calf']},
+ FB:{n:'Full body B',k:'full',p:['hinge:1','vpush','vpull','lunge','rear','core:1','tri','calf']},
+ FC:{n:'Full body C',k:'full',p:['glute','incline','hpull:1','squat:1','ham','lat:1','core','bi:1']},
+ UA:{n:'Upper A',k:'upper',p:['hpush','hpull','vpush','vpull','lat','bi','tri','rear']},
+ UB:{n:'Upper B',k:'upper',p:['incline','vpull:1','hpull:1','lat:1','rear','tri:1','bi:1','core']},
+ LA:{n:'Lower A',k:'lower',p:['squat','hinge','lunge','ham','calf','core','quad','glute']},
+ LB:{n:'Lower B',k:'lower',p:['hinge:1','glute','squat:1','quad','ham:1','calf:1','core:1','lunge:1']},
+ PU:{n:'Push',k:'upper',p:['hpush','vpush','incline','lat','tri','incline:1','tri:1','core']},
+ PL:{n:'Pull',k:'upper',p:['vpull','hpull','rear','bi','hpull:1','bi:1','core','lat']},
+ LE:{n:'Legs',k:'lower',p:['squat','hinge','glute','quad','ham','calf','core','lunge']},
+ PU2:{n:'Push B',k:'upper',p:['incline','vpush:1','hpush:1','lat:1','tri:1','tri','core:1','rear']},
+ PL2:{n:'Pull B',k:'upper',p:['hpull:1','vpull:1','rear:1','bi:1','backext','bi','core:1','lat']},
+ LE2:{n:'Legs B',k:'lower',p:['hinge:1','squat:1','lunge','ham:1','calf:1','glute:1','core','quad:1']},
+ CA:{n:'Cardio & mobility',k:'cardio',p:[]}
+};
+const FOCUS = {glutes:['glute','lower'],arms:['bi','upper'],chest:['incline','upper'],back:['vpull','upper'],shoulders:['lat','upper'],core:['core','any'],legs:['quad','lower']};
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAYS_LONG = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+// meal id -> photo file in img/meals/ (Unsplash, free licence)
+const PHOTOS={b1:'overnight-oats',b2:'overnight-oats',b11:'chia-pudding',b3:'scrambled-eggs',b6:'omelette',b4:'yoghurt-bowl',s1:'yoghurt-bowl',b5:'cereal-banana',b7:'breakfast-wrap',b8:'avocado-toast',b9:'smoothie',s3:'smoothie',s9:'smoothie',top:'smoothie',b10:'cottage-toast',b12:'sweet-potato-hash',l1:'chicken-rice-bowl',l2:'wrap',l3:'wrap',l4:'lentil-salad',l11:'lentil-salad',l5:'buddha-bowl',l6:'burrito-bowl',l7:'salmon-quinoa',l8:'tofu-noodles',l9:'prawn-noodle-salad',l10:'potato-egg-salad',d1:'roast-chicken',d2:'stir-fry',d11:'stir-fry',d3:'baked-fish',d4:'bolognese',d7:'bolognese',d5:'curry',d8:'curry',d6:'salmon-quinoa',d9:'chilli',d10:'fajitas',d12:'fried-rice',s2:'apple-peanut-butter',s4:'rice-cakes',s10:'rice-cakes',s5:'hummus',s6:'boiled-eggs',s7:'edamame',s8:'banana-almonds'};
+const HAVE_PHOTOS=new Set(['apple-peanut-butter','avocado-toast','baked-fish','banana-almonds','boiled-eggs','bolognese','breakfast-wrap','buddha-bowl','burrito-bowl','cereal-banana','chia-pudding','chicken-rice-bowl','chilli','cottage-toast','curry','edamame','fajitas','fried-rice','hummus','lentil-salad','omelette','overnight-oats','potato-egg-salad','prawn-noodle-salad','roast-chicken','salmon-quinoa','scrambled-eggs','smoothie','stir-fry','sweet-potato-hash','tofu-noodles','wrap','yoghurt-bowl']);
+// exercise id -> YouTube Short (most-viewed relevant form Short, chosen Nov 2026)
+const SHORTS={backext:'upxW1WlptUE',bbrow:'p9RihhjmJsw',bbsquat:'dW3zj79xfrc',bench:'PTzUJkPrrDw',benchdip:'4ua3MzaU0QU',boxsquat:'59lXChuNcm8',bridge:'LkCJxld5Bj4',bss:'hlHJKu0XX4c',cablecrunch:'ByZJuk85YuE',cablecurl:'KY_c3LkPZa8',cablefly:'ymB_N9Mstu8',cablelat:'KVauca12MF4',cablerow:'LyZH4UGdDTc',calfmach:'sNqa1ad2qIQ',chestpress:'Qu7-ceCvq7w',csrow:'2ByilQ4NaAs',dbbench:'P3woBOTrioY',dbcurl:'MfW-dMRkOgY',dblat:'Kl3LEzQ5Zqs',dbohext:'AYqg9S5FrUU',dbohp:'k6tzKisR3NY',dbpullover:'Datv2L6t3-4',dbrdl:'hu3jRvTc_po',dbrevfly:'LsT-bR_zxLo',dbrow:'vu_YDt9nGv4',dbthrust:'CvuVYMFd11g',deadbug:'5qah1cTaJCk',deadlift:'pwABIey6Oug',diamond:'K-icnGr2LzU',doorrow:'9SShjlNouXw',facepull:'I41wK3wTZlo',feetup:'jBH1xj-wDjk',goblet:'KZaCVtOPaB0',hack:'xb9RYrKQF1k',hammer:'lmIo_gVE8T4',heelgoblet:'KZaCVtOPaB0',hipthrust:'CvuVYMFd11g',hkr:'XQc0WHO90Lk',incbb:'98HWfiRonkE',incdb:'8fXfwG4ftaQ',inclcurl:'VD0mc0oX2ac',invrow:'iPbAldlORHE',kickback:'n-cgsNePyFo',legext:'iQ92TuvBqRo',legpress:'EotSw18oR9w',lyingcurl:'_lgE0gPvbik',machpress:'6v4nrRVySj0',ngpulldown:'1PkjtyA8Y-o',ohext:'9Ark9S11uXw',ohp:'4LBVP2Oe7fg',packcurl:'usUSYDC8Pi8',pallof:'YWfioXCZCu0',pike:'UalsVVpBacw',plank:'Pkp3SOvipZ0',pulldown:'bNmvKpJSWKM',pullup:'ym1V5H35IpA',pushdown:'1FjkhpZsaxc',pushup:'pKZ-lkKKMws',rdl:'hu3jRvTc_po',revfly:'O2J8Qs7Wl3U',revlunge:'q0XgDzjvDMA',seatcalf:'z1N8ZRsb4bg',seatedcurl:'xdbEG3xGLI8',sideplank:'Ye7G1wQCMgk',slbridge:'RNMIy5Q5XBY',slcalf:'fDwxtPRTtvI',slidecurl:'hDZFKJT6nvM',slrdl:'68g0Svu3E0o',stepup:'8q9LVgN2RD4',tempo:'Qj0UtfzpWGM',tpraise:'aANiDrTJtAE',walklunge:'hNHnSC_KXOI',wallsit:'gn1GW7dBoog',ytw:'tlcuHSz1TQE'};
+// exercise id -> regular YouTube video under 3 minutes, used only where no suitable Short exists
+const VIDEOS={landmine:'Sjb5meztfSE'};
+
+// ---------- PLAN ENGINE (pure functions, no DOM) ----------
+const GROUPS = {chicken:['chicken','thigh'],beef:['mince','steak','roo'],fish:['salmon','barra','tuna'],prawns:['prawns'],eggs:['egg','eggw'],tofu:['tofu','tempeh','edamame'],legumes:['lentils','chickpeas','beans'],rice:['rice','brownrice','quinoa'],pasta:['pasta','noodles'],potato:['potato','sweetpot'],oats:['oats','weetbix'],yoghurt:['yog','cottage'],avocado:['avo'],mushrooms:['mushroom'],spicy:['curry','spice','salsa'],peanut:['pb','almonds']};
+const r5 = x => Math.round(x/5)*5;
+const r10 = x => Math.round(x/10)*10;
+const clamp = (x,a,b) => Math.min(b,Math.max(a,x));
+function hashStr(s){let h=2166136261;for(const ch of String(s)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0)||1}
+function rng(seed){let s=seed%2147483647||1;return()=>(s=s*16807%2147483647)/2147483647}
+
+function calcTargets(p){
+  const w=+p.weight,h=+p.height,a=+p.age,hasGoal=+p.goalw>0,gw=hasGoal?+p.goalw:w;
+  const sex={m:5,f:-161}[p.gender]??-78;
+  const bmr=10*w+6.25*h-5*a+sex;
+  const jobF={desk:1.2,feet:1.375,physical:1.55}[p.job]||1.2;
+  const train=p.days.length*(+p.len||60)*5/7;
+  const tdee=bmr*jobF+train;
+  const hm=h/100, bmiNow=w/hm/hm, minHealthy=Math.ceil(18.5*hm*hm);
+  const notes=[];
+  let goalw=gw;
+  if(hasGoal&&gw<minHealthy){goalw=minHealthy;notes.push(`Your goal weight sits below the healthy range for your height, so we've set ${minHealthy} kg as your target. A body-fat goal often matters more than the scale.`)}
+  const diff=goalw-w, pace={steady:.005,moderate:.0075,fast:.01}[p.pace]||.0075;
+  const preg=p.health.includes('pregnant');
+  let delta=0, mode='maintain';
+  const g=p.goal;
+  if(preg){mode='maintain';notes.push('Pregnancy: we keep you at maintenance calories with no deficit. Please follow your doctor or midwife on weight gain.')}
+  else if(g==='shred'){ if(diff<0||bmiNow>20){delta=-w*pace*1100;mode='lose'} }
+  else if(g==='muscle'){ if(diff<-2){delta=-.1*tdee;mode='recomp';notes.push('You picked muscle gain with a lower goal weight, so we use a small deficit and high protein to build muscle while leaning out.')} else {delta=(p.exp==='advanced'?150:250)+(p.pace==='fast'?100:p.pace==='steady'?-50:0);mode='gain'} }
+  else if(g==='tone'){ if(diff<-2){delta=-tdee*({steady:.1,moderate:.15,fast:.2}[p.pace]||.15);mode='lose'} else mode='recomp' }
+  else if(g==='strength'){ if(diff<-3){delta=-.1*tdee;mode='lose'} else {delta=150;mode='gain'} }
+  else if(g==='athletic'){ if(diff<-2){delta=-.1*tdee;mode='lose'} }
+  else { if(diff<-2){delta=-w*.005*1100;mode='lose'} else if(diff>2){delta=200;mode='gain'} }
+  delta=Math.max(delta,-.25*tdee);
+  const floor=Math.max({m:1500,f:1200}[p.gender]||1350,bmr*.9);
+  let kcal=Math.max(floor,tdee+delta);
+  if(kcal>tdee+delta+20&&delta<0)notes.push('We capped your deficit so calories never drop below a safe minimum for you.');
+  kcal=r10(kcal);
+  const realDelta=kcal-tdee;
+  const pk={shred:2.2,tone:2.0,muscle:1.8,strength:1.8,athletic:1.8}[g]||1.6;
+  const refW=bmiNow>30?Math.min(w,27*hm*hm):w;
+  const protein=Math.round(refW*pk);
+  let fat=Math.round(Math.max(kcal*.27/9,w*.6));
+  let carbs=Math.round((kcal-protein*4-fat*9)/4);
+  if(carbs<60){fat=Math.round(w*.6);carbs=Math.round((kcal-protein*4-fat*9)/4)}
+  const rate=Math.abs(realDelta)*7/7700;
+  const weeks=(mode==='lose'||mode==='gain')&&Math.abs(diff)>=1&&rate>0.05?Math.ceil(Math.abs(diff)/rate):0;
+  return {bmr:Math.round(bmr),tdee:r10(tdee),kcal,protein,fat,carbs,delta:Math.round(realDelta),rate:+rate.toFixed(2),weeks,mode,goalw,notes,hasGoal,bmi:+bmiNow.toFixed(1)};
+}
+
+function injuries(p){return ['knee','back','shoulder'].filter(i=>p.health.includes(i))}
+function exCandidates(pat,p){
+  const inj=injuries(p), where=p.where||'g';
+  const base=EX.filter(e=>e.p===pat&&e.eq.includes(where));
+  const safe=base.filter(e=>!inj.some(i=>e.av.includes(i)));
+  return safe.length?safe:base.map(e=>({...e,caution:true}));
+}
+function scheme(p,ex){
+  const g=p.goal, adv=p.exp==='advanced', beg=p.exp==='beginner';
+  if(ex.sec)return {sets:3,reps:'30–45 sec',rest:'45 sec'};
+  if(g==='strength')return ex.c?{sets:adv?5:4,reps:'4–6',rest:'3 min'}:{sets:3,reps:'8–12',rest:'90 sec'};
+  if(g==='athletic')return ex.c?{sets:3,reps:'6–10',rest:'2 min'}:{sets:beg?2:3,reps:'12–15',rest:'60 sec'};
+  return ex.c?{sets:beg?3:adv?4:3,reps:'6–10',rest:'2–3 min'}:{sets:beg?2:3,reps:'10–15',rest:'60–90 sec'};
+}
+function splitFor(p){
+  const n=p.days.length, beg=p.exp==='beginner';
+  const L=Math.min(n,beg?4:6);
+  const lift={1:['FA'],2:['FA','FB'],3:['FA','FB','FC'],4:['UA','LA','UB','LB'],5:['UA','LA','PU','PL','LE'],6:['PU','PL','LE','PU2','PL2','LE2']}[L]||[];
+  return lift.concat(Array(n-L).fill('CA'));
+}
+function exCount(len){return {30:4,45:5,60:6,75:7,90:8}[len]||6}
+
+function buildTraining(p,ov){
+  ov=ov||{};
+  const days=[...p.days].sort((a,b)=>a-b), keys=splitFor(p), count=exCount(+p.len);
+  const sessions=days.map((day,si)=>{
+    const key=keys[si], T=SESS[key];
+    if(key==='CA')return {day,key,name:T.n,items:[],cardio:true};
+    let pats=[...T.p];
+    for(const f of p.focus||[]){
+      const [fp,k]=FOCUS[f]||[];
+      if(!fp)continue;
+      if(k==='any'||T.k===k||T.k==='full'){
+        const head=pats.slice(0,count).map(x=>x.split(':')[0]);
+        if(!head.includes(fp))pats.splice(Math.max(2,count-2),0,fp);
+      }
+    }
+    pats=pats.slice(0,count);
+    const used=new Set();
+    const items=pats.map((pp,i)=>{
+      const [pat,off]=pp.split(':');
+      const c=exCandidates(pat,p);
+      if(!c.length)return null;
+      let idx=(+off||0)%c.length, id=ov[si+'-'+i];
+      let ex=id&&c.find(e=>e.id===id);
+      if(!ex){let k=0;ex=c[idx];while(used.has(ex.id)&&k<c.length){idx=(idx+1)%c.length;ex=c[idx];k++}}
+      used.add(ex.id);
+      return {slot:i,pat,ex,...scheme(p,ex),alts:c.length-1};
+    }).filter(Boolean);
+    return {day,key,name:T.n,items};
+  });
+  return {sessions,rest:[0,1,2,3,4,5,6].filter(d=>!days.includes(d)),cardio:cardioFor(p)};
+}
+function swapExercise(p,plan,si,i){
+  const it=plan.sessions[si].items[i], c=exCandidates(it.pat,p);
+  const inSess=new Set(plan.sessions[si].items.map(x=>x.ex.id));
+  let j=c.findIndex(e=>e.id===it.ex.id);
+  for(let k=1;k<=c.length;k++){const e=c[(j+k)%c.length];if(!inSess.has(e.id)||e.id===it.ex.id)return e.id}
+  return it.ex.id;
+}
+function cardioFor(p){
+  const g=p.goal;
+  if(p.health.includes('pregnant'))return ['Walk 20–30 minutes most days at a pace where you can still talk.','Keep intensity comfortable and skip anything that causes pain or dizziness.'];
+  if(g==='shred'||g==='tone')return ['Walk 8,000–10,000 steps a day. It burns more than most workouts without hurting recovery.','2–3 × 25 min easy cardio (bike, incline walk, swim) on non-lifting days, at a pace where you can talk.'];
+  if(g==='athletic')return ['1 interval session a week: 6 × 1 min hard, 2 min easy.','1 longer easy session (30–45 min run, ride or swim).','7,000–9,000 steps a day.'];
+  if(g==='muscle'||g==='strength')return ['7,000–8,000 steps a day for heart health and recovery.','1–2 × 20 min easy cardio a week. It won\'t hurt your gains.'];
+  return ['Aim for 150–300 minutes of moderate activity a week, as Australia\'s physical activity guidelines recommend.','Walk 7,000–10,000 steps a day.'];
+}
+
+// ---------- MEALS ----------
+function foodOK(key,d){
+  const f=FOODS[key], kind=f[8]||'', al=f[7]||'';
+  if(d.diet==='veg'&&['meat','fish','shell'].includes(kind))return false;
+  if(d.diet==='vegan'&&['meat','fish','shell','egg','dairy','honey'].includes(kind))return false;
+  if(d.diet==='pesc'&&kind==='meat')return false;
+  if(d.diet==='halal'&&key==='roo')return false;
+  if((d.allergies||[]).some(a=>al.split(' ').includes(a)))return false;
+  if((d.dislikes||[]).some(g=>(GROUPS[g]||[]).includes(key)))return false;
+  return true;
+}
+function mealBase(m){return m.ing.reduce((s,[k,g])=>{const f=FOODS[k];s.kcal+=f[1]*g/100;s.p+=f[2]*g/100;s.c+=f[3]*g/100;s.f+=f[4]*g/100;return s},{kcal:0,p:0,c:0,f:0})}
+function mealCandidates(t,d,p){
+  const maxMin={15:15,30:30}[d.cook]||999;
+  let ok=MEALS.filter(m=>m.t===t&&m.ing.every(([k])=>foodOK(k,d)));
+  if(!ok.length&&(d.dislikes||[]).length)ok=MEALS.filter(m=>m.t===t&&m.ing.every(([k])=>foodOK(k,{...d,dislikes:[]})));
+  const quick=ok.filter(m=>m.min<=maxMin);
+  const list=quick.length>=2?quick:ok;
+  const cut=['shred','tone'].includes(p.goal), r=rng(hashStr((p.email||'')+t));
+  const likes=(d.likes||[]).flatMap(g=>GROUPS[g]||[]);
+  return list.map(m=>{const b=mealBase(m);const pd=b.p*4/b.kcal;const lk=m.ing.filter(([k])=>likes.includes(k)).length;
+    return {m,score:lk*.6+pd*(cut?3:1.5)+(d.prep==='batch'&&m.prep?.4:0)-(d.budget==='tight'?m.ing.filter(([k])=>['salmon','prawns','steak','barra'].includes(k)).length*.5:0)+r()*.3}}).sort((a,b)=>b.score-a.score).map(x=>x.m);
+}
+const SPLITS={3:[['b',.3],['l',.35],['d',.35]],4:[['b',.25],['l',.3],['d',.3],['s',.15]],5:[['b',.22],['s',.12],['l',.27],['s',.12],['d',.27]]};
+function portion(m,kcal){
+  const b=mealBase(m), sc=clamp(kcal/b.kcal,.6,2.2);
+  const ing=m.ing.map(([k,g])=>[k,g*sc<12?Math.max(1,Math.round(g*sc)):r5(g*sc)]);
+  const t=ing.reduce((s,[k,g])=>{const f=FOODS[k];s.kcal+=f[1]*g/100;s.p+=f[2]*g/100;s.c+=f[3]*g/100;s.f+=f[4]*g/100;return s},{kcal:0,p:0,c:0,f:0});
+  return {id:m.id,m,ing,kcal:Math.round(t.kcal),p:Math.round(t.p),c:Math.round(t.c),f:Math.round(t.f)};
+}
+function buildMeals(p,d,t,ov){
+  ov=ov||{};
+  const split=SPLITS[d.meals]||SPLITS[4];
+  const cands={};for(const x of ['b','l','d','s'])cands[x]=mealCandidates(x,d,p);
+  const missing=['b','l','d','s'].filter(x=>split.some(s=>s[0]===x)&&!cands[x].length);
+  const powder=['whey','pea'].find(k=>foodOK(k,{...d,dislikes:[]}));
+  const build=(di,fac)=>{
+    let sn=0;
+    return split.map(([type,share],si)=>{
+      const c=cands[type];if(!c.length)return null;
+      const top=c.slice(0,Math.min(c.length,type==='b'?3:5));
+      let idx;
+      if(type==='l')idx=d.prep==='batch'?(di<3?0:1):di;
+      else if(type==='d')idx=d.prep==='batch'?Math.floor(di/2):di+1;
+      else if(type==='s')idx=di+(sn++)*2;
+      else idx=di;
+      let m=top[idx%top.length];
+      const o=ov[di+'-'+si];if(o){const f=c.find(x=>x.id===o);if(f)m=f}
+      return {slot:si,type,...portion(m,t.kcal*share*fac)};
+    }).filter(Boolean);
+  };
+  const days=DAYS.map((_,di)=>{
+    let ms=build(di,1);
+    const pr=ms.reduce((s,x)=>s+x.p,0), hasShake=ms.some(x=>x.ing.some(([k])=>k===powder));
+    if(powder&&t.protein-pr>20&&ms.length){
+      const top={id:'top',n:'Protein top-up shake',t:'x',min:1,ing:[[powder,30]],st:['Shake 1 scoop with 300 ml cold water, any time of day.']};
+      const tp=portion(top,mealBase(top).kcal);
+      ms=build(di,(t.kcal-tp.kcal)/t.kcal);
+      ms.push({slot:99,type:'x',...tp});
+    }
+    return ms;
+  });
+  const totals=days.map(ms=>ms.reduce((s,x)=>({kcal:s.kcal+x.kcal,p:s.p+x.p,c:s.c+x.c,f:s.f+x.f}),{kcal:0,p:0,c:0,f:0}));
+  return {days,totals,missing,split};
+}
+function swapMeal(p,d,plan,di,si){
+  const cur=plan.days[di].find(x=>x.slot===si);if(!cur||cur.type==='x')return null;
+  const c=mealCandidates(cur.type,d,p), today=new Set(plan.days[di].map(x=>x.id));
+  const j=c.findIndex(m=>m.id===cur.id);
+  for(let k=1;k<=c.length;k++){const m=c[(j+k)%c.length];if(!today.has(m.id))return m.id}
+  return cur.id;
+}
+function shopping(mp){
+  const tot={};
+  for(const day of mp.days)for(const m of day)for(const [k,g] of m.ing)tot[k]=(tot[k]||0)+g;
+  const by={};
+  for(const [k,g] of Object.entries(tot)){const a=FOODS[k][5];(by[a]=by[a]||[]).push([k,g])}
+  return Object.keys(AISLES).filter(a=>by[a]).map(a=>({aisle:AISLES[a],items:by[a].sort((x,y)=>y[1]-x[1])}));
+}
+function qty(k,g){
+  if(k==='egg')return `${g} g (about ${Math.max(1,Math.round(g/50))} egg${Math.round(g/50)>1?'s':''})`;
+  const u=LIQUIDS.has(k)?'ml':'g';
+  return g>=1000?`${(g/1000).toFixed(g%1000?1:0)} ${u==='ml'?'L':'kg'}`:`${g} ${u}`;
+}
+function demoURL(ex){return SHORTS[ex.id]?'https://www.youtube.com/shorts/'+SHORTS[ex.id]:VIDEOS[ex.id]?'https://www.youtube.com/watch?v='+VIDEOS[ex.id]:'https://www.youtube.com/results?search_query='+encodeURIComponent(ex.n+' exercise proper form')}
+
+// ---------- APP ----------
+// Real email sending works when the site is hosted on your own domain: paste your free EmailJS keys here.
+const EMAILJS = {serviceId:'', templateId:'', publicKey:''};
+const $ = (s,el=document) => el.querySelector(s);
+const $$ = (s,el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mem = {};
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):(k in mem?mem[k]:d)}catch(e){return k in mem?mem[k]:d}},
+  set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const GOAL_LABEL={shred:'Lean & shredded',muscle:'Build muscle',tone:'Tone up',strength:'Get stronger',health:'Fit & healthy',athletic:'Athletic'};
+const WHERE_LABEL={g:'full gym',d:'home with dumbbells',b:'bodyweight only'};
+const TIME_LABEL={morning:'morning',midday:'lunchtime',evening:'evening',varies:'any time'};
+const SLOT_LABEL={b:'Breakfast',l:'Lunch',d:'Dinner',s:'Snack',x:'Protein top-up'};
+const KIND_CLASS={upper:'r-upper',lower:'r-lower',full:'r-full',cardio:'r-cardio'};
+const KIND_COL={upper:'#7cc4f2',lower:'#6fdba0',full:'#9fe3c3',cardio:'#ffc29f'};
+
+let users = store.get('tm_users',{});
+let session = store.get('tm_session',null);
+let pending = null, reason = '';
+let ui = {tab:'train', day:0};
+const me = () => session && users[session] ? users[session] : null;
+const U = () => { const d=store.get('tm_data',{}); return d[session]||{ov:{ex:{},meal:{}},shop:{}}; };
+const saveU = u => { const d=store.get('tm_data',{}); d[session]=u; store.set('tm_data',d); };
+
+// ---------- illustrations ----------
+function sceneSVG(){
+  const refl=Array.from({length:9},(_,i)=>`<rect x="${860-90+i*7-(i%3)*14}" y="${428+i*15}" width="${180-i*14}" height="4" rx="2" fill="#ffe7b0" opacity="${.75-i*.07}"/>`).join('');
+  const birds=[[1000,170],[1035,150],[1062,186]].map(([x,y])=>`<path d="M${x} ${y}q8 -8 16 0q8 -8 16 0" fill="none" stroke="#2d4a3e" stroke-width="3" stroke-linecap="round"/>`).join('');
+  const foam=Array.from({length:7},(_,i)=>`<path d="M${120+i*150} ${505+(i%2)*14}q22 -8 44 0t44 0" fill="none" stroke="#e9f7ff" stroke-width="3" stroke-linecap="round" opacity=".8"/>`).join('');
+  return `<defs><linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4aa6d6"/><stop offset="1" stop-color="#145d93"/></linearGradient>
+  <radialGradient id="sun"><stop offset="0" stop-color="#fff6d6"/><stop offset=".45" stop-color="#ffe08a"/><stop offset="1" stop-color="#ffb547" stop-opacity="0"/></radialGradient>
+  <linearGradient id="sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7dfb3"/><stop offset="1" stop-color="#e2b676"/></linearGradient>
+  <linearGradient id="rock" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e7b277"/><stop offset="1" stop-color="#c47f45"/></linearGradient></defs>
+  <circle cx="860" cy="400" r="190" fill="url(#sun)" opacity=".8"/><circle cx="860" cy="400" r="62" fill="#fff4cf"/>
+  ${birds}
+  <path d="M0 420 L0 392 Q90 370 190 384 Q280 360 380 388 Q470 398 560 420Z" fill="#9fb9c8" opacity=".75"/>
+  <path d="M1000 420 Q1060 396 1140 404 L1140 420Z" fill="#9fb9c8" opacity=".6"/>
+  <rect x="0" y="418" width="1440" height="200" fill="url(#sea)"/>${refl}${foam}
+  <path d="M0 552 Q300 524 620 530 Q840 536 1015 514 L1000 600 L0 600Z" fill="url(#sand)"/>
+  <path d="M0 552 Q300 524 620 530 Q840 536 1015 514" fill="none" stroke="#fff4dc" stroke-width="5" opacity=".9"/>
+  <ellipse cx="720" cy="556" rx="110" ry="9" fill="#b07a3a" opacity=".25"/><ellipse cx="895" cy="556" rx="100" ry="9" fill="#b07a3a" opacity=".25"/>
+  <rect x="628" y="540" width="372" height="22" rx="6" fill="#3a4a43"/><rect x="628" y="540" width="372" height="5" rx="2.5" fill="#5a6e64"/>
+  <g fill="#0e8a55"><rect x="652" y="392" width="12" height="150" rx="3"/><rect x="776" y="392" width="12" height="150" rx="3"/><rect x="644" y="384" width="152" height="12" rx="6"/><rect x="664" y="462" width="112" height="8" rx="4"/></g>
+  <g fill="#3fd08a"><rect x="652" y="396" width="4" height="146"/><rect x="776" y="396" width="4" height="146"/><rect x="648" y="384" width="144" height="4" rx="2"/></g>
+  <g stroke="#10231b" stroke-width="3"><line x1="700" y1="396" x2="700" y2="436"/><line x1="740" y1="396" x2="740" y2="436"/></g>
+  <g fill="none" stroke="#10231b" stroke-width="5"><circle cx="700" cy="446" r="10"/><circle cx="740" cy="446" r="10"/></g>
+  <g fill="#10231b"><rect x="834" y="446" width="8" height="96" rx="2"/><rect x="944" y="446" width="8" height="96" rx="2"/><rect x="830" y="458" width="14" height="5" rx="2"/><rect x="940" y="458" width="14" height="5" rx="2"/></g>
+  <rect x="804" y="450" width="178" height="6" rx="3" fill="#a9b4af"/>
+  <g fill="#1d2a25"><rect x="812" y="426" width="13" height="54" rx="4"/><rect x="961" y="426" width="13" height="54" rx="4"/></g>
+  <g fill="#3a4a43"><rect x="825" y="433" width="7" height="40" rx="3"/><rect x="954" y="433" width="7" height="40" rx="3"/></g>
+  <rect x="856" y="500" width="78" height="13" rx="6" fill="#ff5a3c"/><rect x="856" y="500" width="78" height="4" rx="2" fill="#ff9a80"/>
+  <g fill="#10231b"><rect x="864" y="513" width="6" height="28"/><rect x="920" y="513" width="6" height="28"/></g>
+  <g transform="translate(604 556) scale(1)"><path d="M-9 -20 q0 -12 9 -12 q9 0 9 12" fill="none" stroke="#10231b" stroke-width="4.5"/><path d="M-13 0 h26 q3 -5 3 -10 a16 13 0 0 0 -32 0 q0 5 3 10z" fill="#10231b"/><path d="M-9 -12 a10 8 0 0 1 8 -6" fill="none" stroke="#56695f" stroke-width="2.5" stroke-linecap="round"/></g><g transform="translate(634 556) scale(0.75)"><path d="M-9 -20 q0 -12 9 -12 q9 0 9 12" fill="none" stroke="#10231b" stroke-width="4.5"/><path d="M-13 0 h26 q3 -5 3 -10 a16 13 0 0 0 -32 0 q0 5 3 10z" fill="#10231b"/><path d="M-9 -12 a10 8 0 0 1 8 -6" fill="none" stroke="#56695f" stroke-width="2.5" stroke-linecap="round"/></g>
+  <path d="M1000 600 L1010 470 Q1040 380 1110 352 L1440 300 L1440 600Z" fill="url(#rock)"/>
+  <path d="M1010 470 Q1040 380 1110 352 L1170 344 Q1110 390 1090 470 L1070 600 L1000 600Z" fill="#a7653a"/>
+  <path d="M1110 352 L1440 300 L1440 316 L1112 362Z" fill="#f2c993"/>
+  <path d="M1104 352 Q1250 318 1440 292 L1440 302 Q1250 330 1108 360Z" fill="#5b9a45"/>
+  ${[0,1,2,3].map(i=>`<path d="M${1100+i*12} ${430+i*40} L1440 ${400+i*45}" stroke="#b8763f" stroke-width="5" opacity=".45"/>`).join('')}
+  ${[[1022,548,-38,232],[1080,552,26,186]].map(([x,b,lean,h])=>{const tx=x+lean,ty=b-h;
+    const leaves=[-165,-130,-95,-55,-20,15,45].map((r,i)=>`<path d="M0 0 Q42 -20 96 8 Q46 0 0 0Z" fill="${i%2?'#2f7d3a':'#43a04c'}" transform="translate(${tx} ${ty}) rotate(${r})"/>`).join('');
+    const rings=Array.from({length:7},(_,i)=>{const t=(i+1)/8,px=x+lean*t*t,py=b-h*t;return `<path d="M${px-6} ${py} q6 4 12 0" fill="none" stroke="#6b4320" stroke-width="2"/>`}).join('');
+    return `<path d="M${x-7} ${b} Q${x+lean*.2} ${b-h*.5} ${tx-4} ${ty} L${tx+4} ${ty} Q${x+lean*.2+9} ${b-h*.5} ${x+7} ${b}Z" fill="#8b5a2b"/>${rings}${leaves}<circle cx="${tx-4}" cy="${ty+6}" r="5" fill="#5b3a1a"/><circle cx="${tx+5}" cy="${ty+5}" r="5" fill="#6b4320"/>`}).join('')}`;
+}
+function mealPic(m){
+  const items=[...m.ing].sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const r=rng(hashStr(m.id));
+  const blobs=items.flatMap(([k,g],i)=>{
+    const n=clamp(Math.round(g/40),2,6), base=clamp(Math.sqrt(g)*1.5,11,24);
+    return Array.from({length:n},()=>{const ang=r()*Math.PI*2, rad=Math.sqrt(r())*(i===0?.55:.92);
+      const x=200+Math.cos(ang)*rad*92, y=80+Math.sin(ang)*rad*36, s=base*(.8+r()*.4), rot=(r()*180).toFixed(0);
+      return [s,`<ellipse cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${(s*1.2).toFixed(0)}" ry="${(s*.75).toFixed(0)}" transform="rotate(${rot} ${x.toFixed(0)} ${y.toFixed(0)})" fill="${FOODS[k][6]}" stroke="#00000022" stroke-width="1.5"/>`]});
+  }).sort((x,y)=>y[0]-x[0]).map(x=>x[1]).join('');
+  const herbs=Array.from({length:6},()=>`<circle cx="${(150+r()*100).toFixed(0)}" cy="${(55+r()*50).toFixed(0)}" r="3.5" fill="#3f8f3a"/>`).join('');
+  const bg=FOODS[items[0][0]][6];
+  return `<svg viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="400" height="150" fill="${bg}" opacity=".28"/>
+  <ellipse cx="206" cy="92" rx="132" ry="58" fill="#00000022"/><ellipse cx="200" cy="82" rx="132" ry="60" fill="#ffffff"/><ellipse cx="200" cy="80" rx="108" ry="46" fill="#f3efe8"/>${blobs}${herbs}</svg>`;
+}
+
+// ---------- chips & forms ----------
+function buildChips(){
+  for(const box of $$('.chips[data-name]')){
+    const name=box.dataset.name, type=box.dataset.type||'radio';
+    box.innerHTML=box.dataset.opts.split('|').map((o,i)=>{
+      const [v,rest]=o.split(/:(.*)/s), [lab,sub]=rest.split('~');
+      const inner=sub?`<b>${lab}</b><small>${sub}</small>`:lab;
+      return `<label class="chip"><input type="${type}" name="${name}" value="${v}" id="${name}-${v}"><span>${inner}</span></label>`;
+    }).join('');
+  }
+}
+function readForm(f){
+  const o={};
+  for(const el of f.elements){
+    if(!el.name)continue;
+    if(el.type==='radio'){if(el.checked)o[el.name]=el.value;else if(!(el.name in o))o[el.name]=''}
+    else if(el.type==='checkbox'){o[el.name]=o[el.name]||[];if(el.checked)o[el.name].push(el.value)}
+    else o[el.name]=el.value.trim();
+  }
+  return o;
+}
+function fillForm(f,o){
+  if(!o)return;
+  for(const el of f.elements){
+    if(!el.name||!(el.name in o))continue;
+    const v=o[el.name];
+    if(el.type==='radio')el.checked=String(v)===el.value;
+    else if(el.type==='checkbox')el.checked=(v||[]).map(String).includes(el.value);
+    else el.value=v;
+  }
+}
+const GOAL_DEFAULTS={pace:'moderate',len:'60',time:'evening',sleep:'7',stress:'med',health:[],focus:[],days:[]};
+const MEAL_DEFAULTS={diet:'any',allergies:[],likes:[],dislikes:[],meals:'4',cook:'30',prep:'daily',budget:'moderate'};
+
+function validateGoals(o){
+  const need=[['gender','your gender'],['age','your age'],['height','your height'],['weight','your current weight'],['goal','a physique goal'],['exp','your experience'],['where','where you train'],['job','your day job']];
+  const miss=need.filter(([k])=>!o[k]||!o[k].length).map(x=>x[1]);
+  if(!o.days.length)miss.push('at least one training day');
+  if(miss.length)return 'Please add '+miss.join(', ')+'.';
+  if(+o.age<16)return 'TrainMe is for people aged 16 and over. Younger athletes should train with a qualified coach or school program.';
+  if(+o.age>90||+o.height<120||+o.height>230||+o.weight<35||+o.weight>250||(o.goalw&&(+o.goalw<35||+o.goalw>250)))return 'Please check your age, height and weights. Use cm and kg.';
+  return '';
+}
+function profileFrom(o){
+  return {...o,age:+o.age,height:+o.height,weight:+o.weight,goalw:+o.goalw||0,len:+o.len||60,days:o.days.map(Number),health:o.health.filter(h=>h!=='none'),email:session};
+}
+
+// ---------- nav & routing ----------
+function renderNav(){
+  const u=me();
+  $('#nav').innerHTML=u
+    ?`<span class="hello">Hi ${esc(u.name.split(' ')[0])}</span>${U().profile?'<a class="btn btn-ghost btn-sm" href="#plan">My plan</a>':''}<button class="btn btn-ghost btn-sm" id="logout">Log out</button>`
+    :`<a class="btn btn-ghost btn-sm" href="#login">Log in</a><a class="btn btn-go btn-sm" href="#signup">Sign up</a>`;
+}
+const VIEWS=['home','signup','login','goals','meals','plan'];
+function go(r){ if(location.hash.slice(1)===r)route(); else location.hash=r; }
+function route(){
+  let r=location.hash.slice(1); if(!VIEWS.includes(r))r='home';
+  if(['goals','meals','plan'].includes(r)&&!me()){pending=r;reason='Sign up or log in to start your plan. We\'ll bring you straight back.';location.hash='login';return}
+  if(['signup','login'].includes(r)&&me()){location.hash=pending||'goals';return}
+  const u=me()?U():null;
+  if((r==='meals'||r==='plan')&&!(u&&u.profile)){location.hash='goals';return}
+  $$('[data-view]').forEach(v=>v.hidden=v.dataset.view!==r);
+  $('#su-why').textContent=reason||'Save your plan and get it by email.';
+  $('#li-why').textContent=reason||'Log in to see your plan.';
+  if(r==='goals'){fillForm($('#f-goals'),{...GOAL_DEFAULTS,...(u.goalsDraft||{})});$('#g-err').textContent=''}
+  if(r==='meals'){fillForm($('#f-meals'),{...MEAL_DEFAULTS,...(u.diet||{}),...(u.mealDraft||{})});const t=calcTargets(u.profile);$('#m-intro').textContent=`Meals are scaled to your targets: ${t.kcal.toLocaleString()} kcal and ${t.protein} g protein a day.`}
+  if(r==='plan')renderPlan();
+  renderNav();
+  window.scrollTo(0,0);
+}
+
+// ---------- auth ----------
+async function hashPw(pw){
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('trainme:'+pw));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+  catch(e){return 'h'+hashStr('trainme:'+pw)}
+}
+function afterAuth(){const to=pending||'goals';pending=null;reason='';location.hash=to}
+async function onSignup(ev){
+  ev.preventDefault();
+  const name=$('#su-name').value.trim(), email=$('#su-email').value.trim().toLowerCase(), phone=$('#su-phone').value.replace(/[\s()-]/g,''), pw=$('#su-pass').value;
+  const err=m=>$('#su-err').textContent=m;
+  if(name.length<2)return err('Please enter your name.');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))return err('Please enter a valid email address.');
+  if(!/^(\+?61|0)[2-478]\d{8}$/.test(phone))return err('Please enter an Australian phone number, like 0412 345 678.');
+  if(pw.length<8)return err('Your password needs at least 8 characters.');
+  if(users[email])return err('There is already an account with this email. Log in instead.');
+  users[email]={name,email,phone,pw:await hashPw(pw),joined:new Date().toISOString()};
+  store.set('tm_users',users);session=email;store.set('tm_session',email);err('');ev.target.reset();afterAuth();
+}
+async function onLogin(ev){
+  ev.preventDefault();
+  const email=$('#li-email').value.trim().toLowerCase(), pw=$('#li-pass').value, u=users[email];
+  if(!u||u.pw!==await hashPw(pw)){$('#li-err').textContent='That email and password don\'t match. Check them or create an account.';return}
+  session=email;store.set('tm_session',email);$('#li-err').textContent='';ev.target.reset();afterAuth();
+}
+
+// ---------- plan rendering ----------
+function compute(){
+  const u=U(), p={...u.profile,email:session}, t=calcTargets(p);
+  const tr=buildTraining(p,u.ov.ex);
+  const mp=u.diet?buildMeals(p,u.diet,t,u.ov.meal):null;
+  return {u,p,t,tr,mp};
+}
+function coachTips(p,t,mp){
+  const meals=mp?mp.split.length:4, tips=[];
+  tips.push(`Eat ${t.protein} g of protein a day, about ${Math.round(t.protein/meals)} g at each of your ${meals} meals.`);
+  tips.push('Finish each set with 1–3 reps left in the tank. When you hit the top of the rep range on every set, add 2.5 kg (upper body) or 5 kg (lower body).');
+  if(t.mode==='lose')tips.push('Weigh yourself 3–4 mornings a week and track the weekly average. If it stalls for 2 weeks, drop 100–150 kcal or add 2,000 steps a day.');
+  else if(t.mode==='gain')tips.push('Aim to gain about 0.25–0.5% of your body weight a month. Gaining faster than that is mostly fat.');
+  else tips.push('Your weight should stay steady while your shape changes. Take progress photos and measurements every 4 weeks.');
+  if(['lt6','6'].includes(p.sleep))tips.push('Sleep is your biggest lever. Under 7 hours makes you hungrier and means more of the weight you lose comes from muscle.');
+  if(p.stress==='high')tips.push('With high stress, keep sessions crisp and stop when form slips. Easy walks help you recover.');
+  return tips;
+}
+function healthAlerts(p,t){
+  const h=p.health, out=[];
+  if(h.some(x=>['heart','bp','diabetes','surgery','pregnant'].includes(x)))out.push(['See your GP before you start','You ticked a condition that needs a quick medical check first (Exercise & Sports Science Australia recommends this as part of its pre-exercise screening). Show them this plan; they may tweak your intensity or targets.']);
+  if(h.includes('asthma'))out.push(['Asthma','Keep your reliever with you, warm up for 10 minutes and ease off if you feel tight.']);
+  const inj=['knee','back','shoulder'].filter(x=>h.includes(x));
+  if(inj.length)out.push(['Working around your '+inj.join(' and '),'We swapped out exercises that load those joints. Any marked "Go light" had no safer option for your equipment. A physio can clear you for heavier work.']);
+  for(const n of t.notes)out.push(['Note',n]);
+  return out.map(([b,s])=>`<div class="alert"><b>${esc(b)}</b>${esc(s)}</div>`).join('');
+}
+function renderPlan(){
+  const {u,p,t,tr,mp}=compute(), name=me().name.split(' ')[0];
+  const kTot=t.protein*4+t.carbs*4+t.fat*9;
+  const macro=(l,g,col,kc)=>`<div class="macro"><span>${l}</span><div class="bar"><i style="width:${Math.round(kc/kTot*100)}%;background:${col}"></i></div><b>${g} g</b></div>`;
+  const time=t.weeks?`<div class="v">${t.weeks}<small> weeks</small></div><div class="k">to reach about ${t.goalw} kg, at roughly ${t.rate} kg a week (estimate)</div>`
+    :(t.mode==='lose'||t.mode==='gain')?`<div class="v">${t.rate}<small> kg a week</small></div><div class="k">Expected ${t.mode==='lose'?'fat loss':'gain'} pace (estimate). Add a goal weight to see a timeline.</div>`
+    :`<div class="v">${t.mode==='recomp'?'Recomp':'Steady'}</div><div class="k">${t.mode==='recomp'?'Lose fat and build muscle at a similar weight':'Hold your weight while you get fitter'}</div>`;
+  const byDay={};tr.sessions.forEach(s=>byDay[s.day]=s);
+  const ribbon=DAYS.map((d,i)=>{const s=byDay[i];if(!s)return `<div class="rday r-rest"><b>${d}</b><span>Rest</span><small>Walk &amp; stretch</small></div>`;
+    const k=SESS[s.key].k;return `<div class="rday ${KIND_CLASS[k]}"><b>${d}</b><span>${s.name}</span><small>${k==='cardio'?'30–40 min':p.len+' min'}</small></div>`}).join('');
+  $('#ph').innerHTML=`<h1>${esc(name)}'s plan</h1>
+   <p class="sub">${GOAL_LABEL[p.goal]}, ${p.days.length} day${p.days.length>1?'s':''} a week, ${WHERE_LABEL[p.where]}. Made ${new Date(u.created||Date.now()).toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'})}.</p>
+   <div class="figs">
+    <div class="fig"><div class="k">Daily calories</div><div class="v">${t.kcal.toLocaleString()}<small> kcal</small></div><div class="k">Maintenance is about ${t.tdee.toLocaleString()} kcal</div></div>
+    <div class="fig"><div class="k">Daily macros</div>${macro('Protein',t.protein,'#7fe0aa',t.protein*4)}${macro('Carbs',t.carbs,'#7cc4f2',t.carbs*4)}${macro('Fat',t.fat,'#ffc29f',t.fat*9)}</div>
+    <div class="fig">${time}</div>
+   </div>
+   <div class="ribbon" aria-label="Your training week">${ribbon}</div>`;
+  const tabs=[['train','Training'],['meals','Meals'],['shop','Shopping list']];
+  $('#pb').innerHTML=`${healthAlerts(p,t)}
+   <div class="coach" id="coach">
+    <div class="panel"><h3>Coach priorities</h3><ul>${coachTips(p,t,mp).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+    <div class="panel" id="aipanel" hidden><h3>Note from your AI coach</h3><div class="ai mut" id="ainote">Your coach is reading your answers…</div>
+     <form class="ask" id="askf"><input id="askq" aria-label="Ask your coach" type="text" placeholder="Ask your coach anything about your plan"><button class="btn btn-go btn-sm" type="submit">Ask</button></form>
+     <div class="answer" id="askans" hidden></div></div>
+   </div>
+   <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button class="tab" role="tab" data-tab="${k}" aria-selected="${ui.tab===k}">${l}</button>`).join('')}</div>
+   <div id="tabbody">${ui.tab==='train'?trainHTML(p,t,tr):ui.tab==='meals'?mealsHTML(p,t,mp,u):shopHTML(mp,u)}</div>`;
+  $('#dock-note').textContent=`Plan for ${me().email}`;
+  aiInit(p,t,tr,mp,u);
+}
+function trainHTML(p,t,tr){
+  const sess=tr.sessions.map((s,si)=>{
+    const k=SESS[s.key].k;
+    const head=`<header><h3>${DAYS_LONG[s.day]}</h3><span class="tag" style="background:${KIND_COL[k]}">${s.name}</span><span class="mut">${k==='cardio'?'30–40 min':p.len+' min'}, ${TIME_LABEL[p.time]||'any time'}</span></header>`;
+    if(s.cardio)return `<div class="sess">${head}<div class="ex"><div><div class="nm">Easy cardio + mobility</div><div class="cue">${esc(tr.cardio[0])} Finish with 10 minutes of hip, hamstring and upper-back mobility.</div></div></div></div>`;
+    const rows=s.items.map((it,i)=>`<div class="ex"><div><div class="nm">${esc(it.ex.n)}</div><div class="cue">${esc(it.ex.cue)}</div>${it.ex.caution?'<div class="caution">Go light and keep it pain-free</div>':''}</div>
+      <div class="dose">${it.sets} × ${it.reps}<small>rest ${it.rest}</small></div>
+      <div class="acts"><a class="btn btn-ghost btn-sm" href="${demoURL(it.ex)}" target="_blank" rel="noopener"><svg><use href="#i-play"/></svg>Watch demo</a>${it.alts?`<button class="btn btn-ghost btn-sm" data-swapex="${si}-${it.slot}"><svg><use href="#i-swap"/></svg>Swap</button>`:''}</div></div>`).join('');
+    return `<div class="sess">${head}<div class="warm">Warm-up: 5 minutes easy cardio, then 2 lighter sets of your first exercise.</div>${rows}</div>`;
+  }).join('');
+  const blk=[['Week 1','3 reps left'],['Week 2','2 reps left'],['Week 3','1–2 reps left'],['Week 4','1 rep left'],['Week 5','Deload: half the sets']];
+  return `${sess}<div class="two">
+   <div class="panel"><h3>How to progress</h3><p class="mut">Run this 5-week block, then repeat it with slightly heavier weights.</p>
+    <div class="block">${blk.map(([w,x])=>`<div><b>${w}</b>${x}</div>`).join('')}</div>
+    <ul><li>Log every set. Beat last week by one rep or a little weight.</li><li>Top of the rep range on all sets? Add weight next session.</li><li>Feeling run-down or joints achy? Take the deload early.</li></ul></div>
+   <div class="panel"><h3>Cardio, steps &amp; recovery</h3><ul>${tr.cardio.map(x=>`<li>${esc(x)}</li>`).join('')}<li>Sleep 7–9 hours and drink about ${Math.round(p.weight*.035*10)/10} L of water a day, more on hot Sydney days.</li></ul></div>
+  </div>`;
+}
+function mealsHTML(p,t,mp,u){
+  if(!mp)return `<div class="panel"><h3>No meal plan yet</h3><p class="mut">You skipped the meal questions. Your daily targets above still apply. Add a meal plan any time.</p><div class="formend"><a class="btn btn-cta" href="#meals">Create my meal plan</a></div></div>`;
+  const day=mp.days[ui.day], tot=mp.totals[ui.day];
+  const pick=DAYS.map((d,i)=>`<label class="chip"><input type="radio" name="mday" value="${i}" ${i===ui.day?'checked':''}><span>${d}</span></label>`).join('');
+  const miss=mp.missing.length?`<div class="alert"><b>Limited options</b>We couldn't find ${mp.missing.map(x=>SLOT_LABEL[x].toLowerCase()).join(' or ')} meals that fit all your choices, so those slots are left out. Loosen a dislike to get more.</div>`:'';
+  const halal=u.diet.diet==='halal'?'<p class="small mut" style="margin-top:10px">Buy halal-certified chicken and beef: Woolworths and Coles stock halal lines, and there are halal butchers across Sydney.</p>':'';
+  const cards=day.map(m=>`<article class="meal"><div class="pic">${HAVE_PHOTOS.has(PHOTOS[m.m.id])?`<img src="img/meals/${PHOTOS[m.m.id]}.jpg" alt="${esc(m.m.n)}" loading="lazy">`:mealPic(m.m)}</div><div class="body">
+    <div class="when">${SLOT_LABEL[m.type]}</div><h3>${esc(m.m.n)}</h3>
+    <div class="mac"><span><b>${m.kcal}</b> kcal</span><span>Protein <b>${m.p} g</b></span><span>Carbs <b>${m.c} g</b></span><span>Fat <b>${m.f} g</b></span><span>${m.m.min} min</span></div>
+    <div><span class="lbl">Ingredients</span><ul>${m.ing.map(([k,g])=>`<li>${qty(k,g)} ${esc(FOODS[k][0].toLowerCase())}</li>`).join('')}</ul></div>
+    <div><span class="lbl">Method</span><ol>${m.m.st.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div></div>
+    <div class="foot"><span class="small mut">Add salt, pepper and spices to taste.</span>${m.type!=='x'?`<button class="btn btn-ghost btn-sm" data-swapmeal="${ui.day}-${m.slot}"><svg><use href="#i-swap"/></svg>Swap meal</button>`:''}</div></article>`).join('');
+  return `${miss}<div class="chips daypick" role="radiogroup" aria-label="Day">${pick}</div>
+   <div class="meals">${cards}</div>
+   <div class="totals"><span>${DAYS_LONG[ui.day]} total: <b>${tot.kcal.toLocaleString()} kcal</b> of ${t.kcal.toLocaleString()}</span><span>Protein <b>${tot.p} g</b> of ${t.protein}</span><span>Carbs <b>${tot.c} g</b></span><span>Fat <b>${tot.f} g</b></span></div>
+   <p class="small mut" style="margin-top:10px">Every ingredient is a standard line at Woolworths, Coles or Aldi. Rice and quinoa are weighed cooked; microwave pouches save time.</p>${halal}`;
+}
+function shopHTML(mp,u){
+  if(!mp)return `<div class="panel"><h3>No shopping list yet</h3><p class="mut">Create a meal plan and we'll build your weekly list.</p><div class="formend"><a class="btn btn-cta" href="#meals">Create my meal plan</a></div></div>`;
+  const tick=u.shop||{};
+  return `<p class="mut" style="margin-top:16px">Amounts for 7 days, grouped by supermarket aisle. Tick items off as you shop.</p><div class="shop">${shopping(mp).map(a=>`<div class="panel"><h3>${a.aisle}</h3>${a.items.map(([k,g])=>`<label><input type="checkbox" data-shop="${k}" ${tick[k]?'checked':''}><span>${esc(FOODS[k][0])}</span><em>${qty(k,g)}</em></label>`).join('')}</div>`).join('')}</div>`;
+}
+function rerender(){const y=window.scrollY;renderPlan();window.scrollTo(0,y)}
+
+// ---------- AI coach (Claude, when available) ----------
+const sampleP = (window.claude&&window.claude.use) ? window.claude.use('sample').catch(()=>null) : Promise.resolve(null);
+let wantAI=false;
+function planBrief(p,t,tr,mp){
+  return {name:me().name.split(' ')[0],age:p.age,gender:p.gender,height_cm:p.height,weight_kg:p.weight,goal:GOAL_LABEL[p.goal],goal_weight_kg:t.goalw,experience:p.exp,equipment:WHERE_LABEL[p.where],days:p.days.map(d=>DAYS[d]),session_min:p.len,time:p.time,job:p.job,sleep:p.sleep,stress:p.stress,focus:p.focus,health:p.health,notes:p.notes,
+    targets:{kcal:t.kcal,protein_g:t.protein,carbs_g:t.carbs,fat_g:t.fat,est_weeks:t.weeks},
+    training:tr.sessions.map(s=>`${DAYS[s.day]} ${s.name}: ${s.items.map(i=>i.ex.n).join(', ')}`),
+    meals:mp?mp.days[0].map(m=>m.m.n):'no meal plan'};
+}
+async function aiInit(p,t,tr,mp,u){
+  const s=await sampleP, panel=$('#aipanel');
+  if(!s||!panel)return;
+  panel.hidden=false;
+  const note=$('#ainote');
+  if(u.ai&&!wantAI){note.textContent=u.ai;note.classList.remove('mut');}
+  else if(wantAI){
+    wantAI=false;
+    const prompt=`You are TrainMe's head coach: a world-class personal trainer and sports dietitian who follows evidence-based methods (Schoenfeld, Helms, Aragon, Phillips). Write a short personal note to the client about their new plan.
+Rules: exactly 4 bullet points, each one sentence, 90 words total at most, each starting with "- ". Be specific to their data (goal, schedule, lifestyle, notes). If they list a medical condition, pregnancy or injury, one bullet must tell them to check with their GP or physio and how to train around it safely. Never diagnose, never change their numbers, no emoji, Australian spelling.
+Client data: ${JSON.stringify(planBrief(p,t,tr,mp))}`;
+    try{
+      const res=await s(prompt,{onText:({text})=>{note.textContent=text;note.classList.remove('mut')}});
+      const cur=U();cur.ai=res.text;saveU(cur);note.textContent=res.text;
+    }catch(e){
+      if(e&&e.code==='not_granted'){panel.hidden=true;return}
+      note.textContent='Your AI coach is busy right now. Your plan is complete; try the question box below in a minute.';
+    }
+  } else {note.textContent='Ask your coach anything about your plan, like "Can I train legs two days in a row?"'}
+  $('#askf').onsubmit=async ev=>{
+    ev.preventDefault();
+    const q=$('#askq').value.trim(), out=$('#askans');if(!q)return;
+    out.hidden=false;out.textContent='Thinking…';
+    try{
+      const res=await s(`You are TrainMe's head coach, a world-class evidence-based personal trainer and sports dietitian. Answer the client's question in at most 110 words, plain text, practical and specific to their plan. If it involves pain, illness, medication or pregnancy, advise seeing their GP or physio. Australian spelling, no emoji.
+Client and plan: ${JSON.stringify(planBrief(p,t,tr,mp))}
+Question: ${q}`,{onText:({text})=>out.textContent=text,cache:false});
+      out.textContent=res.text;
+    }catch(e){out.textContent=e&&e.code==='rate_limited'?'Too many questions at once. Try again in a minute.':'Couldn\'t reach your coach just now. Try again shortly.'}
+  };
+}
+
+// ---------- email ----------
+function buildEmail(){
+  const {u,p,t,tr,mp}=compute(), user=me(), first=user.name.split(' ')[0];
+  const G='#0e8a55', td='padding:8px 10px;border-bottom:1px solid #e3ece6;font-size:14px;vertical-align:top;';
+  const h2=x=>`<h2 style="font-family:Arial,sans-serif;font-size:22px;color:#10231b;margin:28px 0 10px">${x}</h2>`;
+  let html=`<div style="background:#eef6f1;padding:20px 0;font-family:Arial,Helvetica,sans-serif;color:#10231b"><table role="presentation" width="100%" style="max-width:640px;margin:0 auto;background:#ffffff;border-radius:14px;border-collapse:separate;overflow:hidden"><tr><td style="background:${G};padding:20px 24px;color:#fff;font-size:26px;font-weight:bold">TrainMe</td></tr><tr><td style="padding:22px 24px">
+  <p style="font-size:16px;margin:0 0 6px">Hi ${esc(first)},</p><p style="font-size:15px;margin:0;color:#4a5f55">Here is your ${GOAL_LABEL[p.goal].toLowerCase()} plan: ${p.days.length} training days a week, ${WHERE_LABEL[p.where]}.</p>
+  <table role="presentation" width="100%" style="margin-top:16px;border-collapse:collapse;background:#eef6f1;border-radius:10px"><tr>
+   ${[['Calories',t.kcal.toLocaleString()+' kcal'],['Protein',t.protein+' g'],['Carbs',t.carbs+' g'],['Fat',t.fat+' g']].map(([k,v])=>`<td style="padding:12px;text-align:center"><div style="font-size:12px;color:#4a5f55">${k}</div><div style="font-size:20px;font-weight:bold">${v}</div></td>`).join('')}</tr></table>
+  ${t.weeks?`<p style="font-size:14px;color:#4a5f55">Estimated ${t.weeks} weeks to about ${t.goalw} kg.</p>`:''}`;
+  html+=h2('Your training week');
+  for(const s of tr.sessions){
+    html+=`<p style="font-size:16px;font-weight:bold;margin:18px 0 6px">${DAYS_LONG[s.day]}: ${s.name}</p>`;
+    if(s.cardio){html+=`<p style="font-size:14px;margin:0">${esc(tr.cardio[0])} Then 10 minutes of mobility.</p>`;continue}
+    html+=`<table role="presentation" width="100%" style="border-collapse:collapse">${s.items.map(it=>`<tr><td style="${td}"><b>${esc(it.ex.n)}</b><br><span style="color:#4a5f55">${esc(it.ex.cue)}</span><br><a href="${demoURL(it.ex)}" style="color:${G};font-weight:bold">&#9654; Watch demo video</a></td><td style="${td}white-space:nowrap;text-align:right"><b>${it.sets} &times; ${it.reps}</b><br><span style="color:#4a5f55">rest ${it.rest}</span></td></tr>`).join('')}</table>`;
+  }
+  html+=`<p style="font-size:14px;margin-top:14px"><b>Progress:</b> leave 1–3 reps in the tank; when you hit the top of the rep range on every set, add weight. Deload every 5th week.</p><p style="font-size:14px"><b>Cardio:</b> ${tr.cardio.map(esc).join(' ')}</p>`;
+  if(mp){
+    html+=h2('Your meals');
+    html+=`<table role="presentation" width="100%" style="border-collapse:collapse">${mp.days.map((d,i)=>`<tr><td style="${td}font-weight:bold;width:52px">${DAYS[i]}</td><td style="${td}">${d.map(m=>`${SLOT_LABEL[m.type]}: ${esc(m.m.n)}`).join('<br>')}</td><td style="${td}text-align:right;white-space:nowrap">${mp.totals[i].kcal} kcal<br>${mp.totals[i].p} g protein</td></tr>`).join('')}</table>`;
+    html+=h2('Recipes');
+    const seen=new Set();
+    for(const d of mp.days)for(const m of d){if(seen.has(m.id))continue;seen.add(m.id);
+      html+=`<p style="font-size:16px;font-weight:bold;margin:16px 0 4px">${esc(m.m.n)} <span style="font-weight:normal;color:#4a5f55;font-size:13px">${m.kcal} kcal, ${m.p} g protein, ${m.m.min} min</span></p><p style="font-size:14px;margin:0 0 4px">${m.ing.map(([k,g])=>`${qty(k,g)} ${esc(FOODS[k][0].toLowerCase())}`).join(', ')}</p><ol style="font-size:14px;margin:0;padding-left:20px">${m.m.st.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`}
+    html+=h2('Shopping list for the week');
+    html+=shopping(mp).map(a=>`<p style="font-size:14px;margin:10px 0 2px;font-weight:bold">${a.aisle}</p><p style="font-size:14px;margin:0;color:#334">${a.items.map(([k,g])=>`${esc(FOODS[k][0])} (${qty(k,g)})`).join(', ')}</p>`).join('');
+  }
+  html+=`<p style="font-size:12px;color:#6b7d74;margin-top:28px">General guidance, not medical advice. Check with your GP before starting if you have a health condition or are pregnant. Stop any exercise that causes pain or dizziness.</p></td></tr></table></div>`;
+  const text=`Hi ${first},\n\nYour TrainMe plan (${GOAL_LABEL[p.goal]})\nDaily targets: ${t.kcal} kcal, ${t.protein} g protein, ${t.carbs} g carbs, ${t.fat} g fat\n\n`+
+    tr.sessions.map(s=>`${DAYS_LONG[s.day]}: ${s.name}\n`+(s.cardio?`  ${tr.cardio[0]}\n`:s.items.map(i=>`  ${i.ex.n}: ${i.sets} x ${i.reps} (demo: ${demoURL(i.ex)})`).join('\n')+'\n')).join('\n')+
+    (mp?'\nMeals (Monday):\n'+mp.days[0].map(m=>`  ${SLOT_LABEL[m.type]}: ${m.m.n} (${m.kcal} kcal)`).join('\n')+'\n':'')+'\nTrainMe';
+  return {html,text,subject:`Your TrainMe plan, ${first}`,to:user.email,name:user.name};
+}
+let dlP=null;
+async function openEmail(){
+  const e=buildEmail();
+  $('#m-to').textContent=`To: ${e.to} (the email you signed up with)`;
+  $('#m-prev').innerHTML=e.html;
+  $('#m-status').textContent='';
+  const shortBody=e.text.length>1600?e.text.slice(0,1600)+'\n…\nPaste the full plan from TrainMe below.':e.text;
+  $('#m-open').href=`mailto:${encodeURIComponent(e.to)}?subject=${encodeURIComponent(e.subject)}&body=${encodeURIComponent(shortBody)}`;
+  const canSend=EMAILJS.serviceId&&EMAILJS.templateId&&EMAILJS.publicKey;
+  $('#m-send').hidden=!canSend;
+  $('#modal').hidden=false;$('#m-close').focus();
+  dlP=dlP||(window.claude&&window.claude.use?window.claude.use('downloads').catch(()=>null):Promise.resolve(null));
+  $('#m-dl').hidden=!(await dlP)&&window.parent!==window;
+}
+async function copyEmail(){
+  const e=buildEmail(), st=$('#m-status');
+  try{
+    if(window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([e.html],{type:'text/html'}),'text/plain':new Blob([e.text],{type:'text/plain'})})])}
+    else await navigator.clipboard.writeText(e.text);
+    st.textContent=`Copied. Open a new email to ${e.to}, paste and send.`;
+  }catch(err){
+    try{await navigator.clipboard.writeText(e.text);st.textContent='Copied as plain text. Paste it into a new email.'}
+    catch(err2){const r=document.createRange();r.selectNodeContents($('#m-prev'));const sel=getSelection();sel.removeAllRanges();sel.addRange(r);st.textContent='Your browser blocked copying. The plan is selected: tap Copy (or press Ctrl+C / Cmd+C).'}
+  }
+}
+async function downloadPlan(){
+  const e=buildEmail(), d=await dlP, st=$('#m-status');
+  const doc=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${esc(e.subject)}</title></head><body style="margin:0">${e.html}</body></html>`;
+  if(!d){const u=URL.createObjectURL(new Blob([doc],{type:'text/html'})),l=document.createElement('a');l.href=u;l.download='TrainMe-plan.html';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);st.textContent='Saved. Attach the file to an email or open it in your browser.';return}
+  try{await d.save({filename:'TrainMe-plan.html',data:doc});st.textContent='Saved. Attach the file to an email or open it in your browser.'}
+  catch(err){st.textContent='Download was cancelled.'}
+}
+async function sendEmail(){
+  const e=buildEmail(), st=$('#m-status');st.textContent='Sending…';
+  try{
+    const r=await fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:EMAILJS.serviceId,template_id:EMAILJS.templateId,user_id:EMAILJS.publicKey,template_params:{to_email:e.to,to_name:e.name,subject:e.subject,html:e.html}})});
+    st.textContent=r.ok?`Sent to ${e.to}. Check your inbox (and spam folder).`:'Sending failed. Use Copy formatted email instead.';
+  }catch(err){st.textContent='Sending isn\'t available here. Use Copy formatted email instead.'}
+}
+
+// ---------- events ----------
+function saveGoalsDraft(){const u=U();u.goalsDraft=readForm($('#f-goals'));saveU(u)}
+function submitGoals(next){
+  const o=readForm($('#f-goals')), msg=validateGoals(o);
+  $('#g-err').textContent=msg;
+  if(msg){$('#g-err').scrollIntoView({block:'center',behavior:'smooth'});return}
+  const u=U();u.goalsDraft=o;u.profile=profileFrom(o);u.ov={ex:{},meal:{}};u.ai='';u.created=Date.now();
+  if(next==='plan'&&!u.diet)u.skippedMeals=true;
+  saveU(u);
+  if(next==='plan'){wantAI=true;ui.tab='train'}
+  go(next);
+}
+document.addEventListener('click',ev=>{
+  const t=ev.target.closest('button,a');if(!t)return;
+  if(t.dataset.go)go(t.dataset.go);
+  else if(t.dataset.scroll)document.getElementById(t.dataset.scroll).scrollIntoView({behavior:'smooth'});
+  else if(t.id==='logout'){session=null;store.set('tm_session',null);location.hash='home';renderNav()}
+  else if(t.dataset.pw){const i=document.getElementById(t.dataset.pw);i.type=i.type==='password'?'text':'password';t.textContent=i.type==='password'?'Show':'Hide'}
+  else if(t.id==='to-meals')submitGoals('meals');
+  else if(t.id==='skip-plan')submitGoals('plan');
+  else if(t.id==='gen-plan'){const u=U();u.diet=readForm($('#f-meals'));u.diet.meals=+u.diet.meals||4;u.ov.meal={};u.shop={};u.skippedMeals=false;saveU(u);wantAI=true;ui.tab='train';ui.day=0;go('plan')}
+  else if(t.dataset.tab){ui.tab=t.dataset.tab;rerender()}
+  else if(t.dataset.swapex){const [si,i]=t.dataset.swapex.split('-').map(Number);const {u,p,tr}=compute();const idx=tr.sessions[si].items.findIndex(x=>x.slot===i);u.ov.ex[si+'-'+i]=swapExercise(p,tr,si,idx);saveU(u);rerender()}
+  else if(t.dataset.swapmeal){const [di,si]=t.dataset.swapmeal.split('-').map(Number);const {u,p,mp}=compute();const id=swapMeal(p,u.diet,mp,di,si);if(id){u.ov.meal[di+'-'+si]=id;saveU(u);rerender()}}
+  else if(t.id==='email-btn')openEmail();
+  else if(t.id==='m-close')$('#modal').hidden=true;
+  else if(t.id==='m-copy')copyEmail();
+  else if(t.id==='m-dl')downloadPlan();
+  else if(t.id==='m-send')sendEmail();
+});
+document.addEventListener('change',ev=>{
+  const t=ev.target;
+  if(t.name==='mday'){ui.day=+t.value;rerender()}
+  else if(t.dataset.shop){const u=U();u.shop=u.shop||{};u.shop[t.dataset.shop]=t.checked;saveU(u)}
+  else if(t.name==='health'){const boxes=$$('input[name=health]');if(t.value==='none'&&t.checked)boxes.forEach(b=>{if(b!==t)b.checked=false});else if(t.checked)$('#health-none').checked=false}
+  if(t.closest('#f-goals'))saveGoalsDraft();
+  if(t.closest('#f-meals')){const u=U();u.mealDraft=readForm($('#f-meals'));saveU(u)}
+});
+$('#f-goals').addEventListener('input',()=>saveGoalsDraft());
+$('#f-signup').addEventListener('submit',onSignup);
+$('#f-login').addEventListener('submit',onLogin);
+$('#modal').addEventListener('click',ev=>{if(ev.target.id==='modal')$('#modal').hidden=true});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')$('#modal').hidden=true});
+window.addEventListener('hashchange',route);
+
+buildChips();
+$('#scene').innerHTML=sceneSVG();
+const mq=matchMedia('(max-width:700px)'), fitScene=()=>$('#scene').setAttribute('preserveAspectRatio',mq.matches?'xMaxYMax slice':'xMidYMax slice');fitScene();mq.addEventListener?.('change',fitScene);
+$$('.mini').forEach(s=>s.innerHTML=`<rect width="1440" height="600" fill="#ffd9b0"/>`+sceneSVG());
+route();
+
+}
+</script>
+</body>
+</html>
