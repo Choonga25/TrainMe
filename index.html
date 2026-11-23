@@ -202,6 +202,13 @@ textarea{min-height:90px;resize:vertical}
 .totals{display:flex;gap:18px;flex-wrap:wrap;background:var(--soft);border-radius:14px;padding:12px 16px;margin-top:14px;font-size:15px}
 .shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px}
 .shop .panel{margin:0}
+.eo-seg{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}.eo-seg button{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:10px 16px;min-height:44px;font-weight:600;cursor:pointer}.eo-seg button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.eo-drop{display:flex;align-items:center;justify-content:center;text-align:center;min-height:110px;border:2px dashed var(--line);border-radius:16px;padding:16px;cursor:pointer;color:var(--mut);font-weight:600}.eo-drop input{position:absolute;opacity:0;width:1px;height:1px}.eo-drop:focus-within{outline:3px solid var(--sea)}
+.eo-thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.eo-th{position:relative}.eo-th img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}.eo-th button{position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);cursor:pointer;font-size:18px;line-height:1}
+.eo-list{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}.eo-item{border:1px solid var(--line);border-left:5px solid var(--line);border-radius:14px;padding:12px 14px}.eo-item.good{border-left-color:#22a565}.eo-item.ok{border-left-color:#f2b134}.eo-item.treat{border-left-color:var(--coral)}
+.eo-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.eo-top b{min-width:0;overflow-wrap:anywhere}.eo-item{min-width:0}.ai,.answer{overflow-wrap:anywhere}.eo-kcal{font:800 19px/1 "Barlow Condensed",sans-serif;white-space:nowrap;flex-shrink:0}.eo-mac{font-size:14px;color:var(--mut);margin-top:4px}.eo-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px}.eo-tag{border-radius:999px;padding:3px 10px;font-weight:700}.eo-tag.good{background:#d8f5e5;color:#0b5a35}.eo-tag.ok{background:#fdefcf;color:#7a5200}.eo-tag.treat{background:#ffe0d8;color:#a3301b}.eo-conf{color:var(--mut);padding:3px 0}.eo-note{font-size:14px;margin-top:6px}
+.eo-best{background:var(--soft);border-radius:14px;padding:12px 16px;margin:12px 0}.eo-best h4{margin:0 0 6px}.eo-best ul{margin:0;padding-left:18px}.eo-recent{display:flex;gap:8px;flex-wrap:wrap}
+
 .shop label{display:flex;gap:10px;align-items:center;min-height:40px;border-top:1px solid var(--line);font-size:15px;cursor:pointer}
 .shop label:first-of-type{border-top:0}
 .shop input{width:20px;height:20px;accent-color:var(--green);flex:none}
@@ -1180,7 +1187,8 @@ function renderPlan(){
     <div class="fig">${time}</div>
    </div>
    <div class="ribbon" aria-label="Your training week">${ribbon}</div>`;
-  const tabs=[['train','Training'],['meals','Meals'],['shop','Shopping list']];
+  const tabs=[['train','Training'],['meals','Meals'],['shop','Shopping list']].concat(aiS?[['out','Eating out']]:[]);
+  if(ui.tab==='out'&&!aiS)ui.tab='train';
   $('#pb').innerHTML=`${healthAlerts(p,t)}
    <div class="coach" id="coach">
     <div class="panel"><h3>Coach priorities</h3><ul>${coachTips(p,t,mp).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
@@ -1189,7 +1197,8 @@ function renderPlan(){
      <div class="answer" id="askans" hidden></div></div>
    </div>
    <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button class="tab" role="tab" data-tab="${k}" aria-selected="${ui.tab===k}">${l}</button>`).join('')}</div>
-   <div id="tabbody">${ui.tab==='train'?trainHTML(p,t,tr):ui.tab==='meals'?mealsHTML(p,t,mp,u):shopHTML(mp,u)}</div>`;
+   <div id="tabbody">${ui.tab==='train'?trainHTML(p,t,tr):ui.tab==='meals'?mealsHTML(p,t,mp,u):ui.tab==='out'?outHTML(p,t,u):shopHTML(mp,u)}</div>`;
+  if(ui.tab==='out')outBind(p,t);
   $('#dock-note').textContent=`Plan for ${me().email}`;
   aiInit(p,t,tr,mp,u);
 }
@@ -1243,6 +1252,91 @@ function planBrief(p,t,tr,mp){
     targets:{kcal:t.kcal,protein_g:t.protein,carbs_g:t.carbs,fat_g:t.fat,est_weeks:t.weeks},
     training:tr.sessions.map(s=>`${DAYS[s.day]} ${s.name}: ${s.items.map(i=>i.ex.n).join(', ')}`),
     meals:mp?mp.days[0].map(m=>m.m.n):'no meal plan'};
+}
+// ---------- Eating out: restaurant menu calorie checker (private claude.ai version only; uses the viewer's own Claude plan) ----------
+let aiS=null;
+sampleP.then(s=>{aiS=s;if(s&&$('#tabbody'))rerender()});
+let eoMode='photo', eoFiles=[];
+const eoFit=(it,t,u)=>{const per=Math.round(t.kcal/Math.max(3,(u.diet&&u.diet.meals)||4)),mid=(it.kcal_low+it.kcal_high)/2;
+  return mid<=per*1.1?['good','Fits your plan']:mid<=per*1.6?['ok','Big meal: go lighter elsewhere today']:['treat','Treat meal']};
+function eoResult(r,t,u){
+  if(!r)return '';
+  const per=Math.round(t.kcal/Math.max(3,(u.diet&&u.diet.meals)||4));
+  const items=(r.items||[]).map(it=>{const [cls,lab]=eoFit(it,t,u);return `<li class="eo-item ${cls}"><div class="eo-top"><b>${esc(it.name)}</b><span class="eo-kcal">${it.kcal_low===it.kcal_high?it.kcal_low:`${it.kcal_low}–${it.kcal_high}`} kcal</span></div>
+   <div class="eo-mac">Protein ${it.protein_g}g · Carbs ${it.carbs_g}g · Fat ${it.fat_g}g</div>
+   <div class="eo-tags"><span class="eo-tag ${cls}">${lab}</span><span class="eo-conf">${it.source==='published'?'Published figure':`Estimate, ${esc(it.confidence||'medium')} confidence`}</span></div>${it.note?`<div class="eo-note">${esc(it.note)}</div>`:''}</li>`}).join('');
+  return `<div class="panel eo-res"><h3>${esc(r.restaurant||'Menu')}</h3><p class="mut small">${r.chain?'Chain restaurant: published nutrition figures used where your coach knows them.':'Independent restaurant: figures are estimates from typical ingredients and portions, so treat them as a guide.'} Your meals average about ${per.toLocaleString()} kcal.</p>
+   ${(r.best||[]).length?`<div class="eo-best"><h4>Best picks for your goal</h4><ul>${r.best.map(b=>`<li><b>${esc(b.name)}</b>: ${esc(b.why)}</li>`).join('')}</ul></div>`:''}
+   ${r.tips?`<p class="small">${esc(r.tips)}</p>`:''}<ul class="eo-list">${items}</ul></div>`;
+}
+function outHTML(p,t,u){
+  const saved=(u.menus||[]);
+  return `<div class="eo"><p class="mut" style="margin-top:16px">Eating out? Add the menu and your coach works out the calories and macros of every item, then picks the best options for your goal.</p>
+  <form id="f-menu" class="panel" novalidate>
+   <div class="field"><label for="eo-name">Restaurant <span class="mut">(optional)</span></label><input id="eo-name" type="text" placeholder="e.g. Grill'd, or the café near work"></div>
+   <div class="eo-seg" role="tablist"><button type="button" role="tab" data-eo="photo" aria-selected="${eoMode==='photo'}">Photo of the menu</button><button type="button" role="tab" data-eo="text" aria-selected="${eoMode==='text'}">Paste the menu</button><button type="button" role="tab" data-eo="link" aria-selected="${eoMode==='link'}">Link</button></div>
+   <div id="eo-photo" ${eoMode==='photo'?'':'hidden'}><label class="eo-drop"><input id="eo-files" type="file" accept="image/*" multiple><span>Take or choose photos of the menu (up to 4 pages)</span></label><div id="eo-thumbs" class="eo-thumbs"></div></div>
+   <div id="eo-text" ${eoMode==='text'?'':'hidden'}><textarea id="eo-txt" rows="8" placeholder="Paste the menu here, with prices and descriptions if you have them"></textarea></div>
+   <div id="eo-link" ${eoMode==='link'?'':'hidden'}><input id="eo-url" type="text" inputmode="url" placeholder="https://…"><p class="mut small">Your coach can't open web pages yet. It will use the link to work out the restaurant and check what it knows about that menu. For the most accurate result, open the page and paste the menu or screenshot it.</p></div>
+   <button class="btn btn-cta" type="submit" style="margin-top:16px">Check calories</button>
+   <p class="mut small" id="eo-st" role="status"></p>
+  </form>
+  <div id="eo-out">${eoResult(saved[0],t,u)}</div>
+  ${saved.length>1?`<div class="panel"><h3>Recent menus</h3><div class="eo-recent">${saved.map((m,i)=>`<button class="btn btn-sm" type="button" data-eomenu="${i}">${esc(m.restaurant||'Menu')}</button>`).join('')}</div></div>`:''}
+  <p class="mut small" style="margin-top:14px">Estimates only. Portion sizes, oils and sauces change the real numbers, so ask staff about allergens.</p></div>`;
+}
+function eoNeeds(u){const d=u.diet||{},x=[];if(d.diet&&d.diet!=='any')x.push(String(d.diet));const al=[].concat(d.allergies||[]).filter(Boolean);if(al.length)x.push('allergies/intolerances: '+al.join(', '));return x.length?', dietary needs: '+x.join('; ')+' (flag dishes that clash in "note")':''}
+async function eoShrink(file){
+  const img=await createImageBitmap(file), k=Math.min(1,1600/Math.max(img.width,img.height)), c=document.createElement('canvas');
+  c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+  return await new Promise(r=>c.toBlob(r,'image/jpeg',.85));
+}
+function outBind(p,t){
+  const st=$('#eo-st');
+  document.querySelectorAll('[data-eo]').forEach(b=>b.onclick=()=>{eoMode=b.dataset.eo;['photo','text','link'].forEach(m=>{$('#eo-'+m).hidden=m!==eoMode});document.querySelectorAll('[data-eo]').forEach(x=>x.setAttribute('aria-selected',x.dataset.eo===eoMode))});
+  document.querySelectorAll('[data-eomenu]').forEach(b=>b.onclick=()=>{const u=U(),m=u.menus.splice(+b.dataset.eomenu,1)[0];u.menus.unshift(m);saveU(u);rerender()});
+  const showThumbs=()=>{$('#eo-thumbs').innerHTML=eoFiles.map((f,i)=>`<span class="eo-th"><img alt="Menu page ${i+1}" src="${URL.createObjectURL(f)}"><button type="button" aria-label="Remove page ${i+1}" data-eorm="${i}">×</button></span>`).join('');
+    document.querySelectorAll('[data-eorm]').forEach(b=>b.onclick=()=>{eoFiles.splice(+b.dataset.eorm,1);showThumbs()})};
+  showThumbs();
+  $('#eo-files').onchange=async ev=>{const fs=[...ev.target.files].filter(f=>f.type.startsWith('image/'));ev.target.value='';
+    st.textContent='Preparing photos…';try{for(const f of fs){if(eoFiles.length>=4)break;eoFiles.push(await eoShrink(f))}st.textContent=''}catch(e){st.textContent='Couldn\'t read that photo. Try a JPG or PNG screenshot.'}showThumbs()};
+  $('#f-menu').onsubmit=async ev=>{
+    ev.preventDefault();
+    const s=aiS;if(!s)return;
+    const name=$('#eo-name').value.trim(), txt=$('#eo-txt').value.trim(), url=$('#eo-url').value.trim();
+    const opts={cache:false,modelTier:'complex'};
+    if(eoMode==='photo'){if(!eoFiles.length){st.textContent='Add at least one photo of the menu.';return}
+      let lim={};try{lim=await s.limits()}catch(e){}
+      if(!lim.images){st.textContent='Photos aren\'t available here right now. Paste the menu text instead.';return}
+      opts.images=eoFiles.slice()}
+    if(eoMode==='text'&&txt.length<10){st.textContent='Paste the menu first.';return}
+    if(eoMode==='link'&&!/^https?:\/\/\S+\.\S+/.test(url)){st.textContent='Paste a full link starting with https://';return}
+    const u=U(), per=Math.round(t.kcal/Math.max(3,(u.diet&&u.diet.meals)||4));
+    const prompt=`You are TrainMe's sports dietitian. Work out the nutrition of every dish on a restaurant menu for an Australian client.
+Method: if this is a chain whose official nutrition information you know (Australian versions first), use those figures and set "source":"published". Otherwise estimate each dish from its likely ingredients, cooking method and a typical Australian restaurant portion (count oils, butter, sauces, dressings, cheese and sides), set "source":"estimate" and give an honest range (kcal_low to kcal_high, roughly ±15–30%). Confidence: "high" for simple dishes, "medium" for typical dishes, "low" if the description is vague. Skip drinks unless they are a big part of the menu; include at most 40 items, keeping the menu's order.
+Client: goal ${GOAL_LABEL[p.goal]}, ${t.kcal} kcal a day (about ${per} kcal a meal), protein target ${t.protein} g a day${eoNeeds(u)}.
+Pick 2–3 "best" dishes for this client's goal (high protein, fits about ${per} kcal), each with a short reason that may include a simple tweak like "sauce on the side". Add one sentence of ordering tips.
+Reply with JSON only, no other text, in exactly this shape:
+{"restaurant":"name","chain":true,"items":[{"name":"","kcal_low":0,"kcal_high":0,"protein_g":0,"carbs_g":0,"fat_g":0,"source":"published|estimate","confidence":"high|medium|low","note":"short, optional"}],"best":[{"name":"","why":""}],"tips":""}
+Restaurant name given by the client: ${name||'not given'}.
+${eoMode==='photo'?'The menu is in the attached photo(s). Read every dish.':eoMode==='text'?`Menu:\n${txt.slice(0,12000)}`:`The client gave this menu link (you cannot open it; use the address to identify the restaurant and use what you know about its menu, and say in "tips" that pasting the menu gives better accuracy): ${url}`}`;
+    const btn=ev.target.querySelector('button[type=submit]');btn.disabled=true;
+    st.textContent='Reading the menu and working out the numbers… this can take a minute.';
+    try{
+      const res=await s(prompt,opts), raw=res.text||'', j=raw.slice(raw.indexOf('{'),raw.lastIndexOf('}')+1);
+      let r;try{r=JSON.parse(j)}catch(e){throw {code:'parse'}}
+      r.items=(r.items||[]).filter(it=>it&&it.name).map(it=>{const lo=Math.round(+it.kcal_low||+it.kcal_high||0),hi=Math.round(+it.kcal_high||lo);return {...it,kcal_low:Math.min(lo,hi),kcal_high:Math.max(lo,hi),protein_g:Math.round(+it.protein_g||0),carbs_g:Math.round(+it.carbs_g||0),fat_g:Math.round(+it.fat_g||0)}});
+      if(!r.items.length)throw {code:'empty'};
+      if(name)r.restaurant=name;
+      r.when=Date.now();
+      const cur=U();cur.menus=[r].concat(cur.menus||[]).slice(0,10);saveU(cur);eoFiles=[];
+      rerender();
+      const out=$('#eo-out');if(out)out.scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(e){
+      btn.disabled=false;
+      st.textContent=e&&e.code==='not_granted'?'Allow TrainMe to use Claude to check menus.':e&&e.code==='rate_limited'?'Too many checks at once. Try again in a minute.':e&&(e.code==='parse'||e.code==='empty')?'Couldn\'t read that menu clearly. Try a sharper photo or paste the text.':'Couldn\'t check the menu just now. Try again shortly.';
+    }
+  };
 }
 async function aiInit(p,t,tr,mp,u){
   const s=await sampleP, panel=$('#aipanel');
